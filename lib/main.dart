@@ -1,3 +1,4 @@
+import 'package:envanter_kontrol/screens/add_new_product.dart';
 import 'package:envanter_kontrol/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'utils/colors.dart';
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: ProjectColors.customPrimarySwatch,
       ),
       home: HomePage(title: _appTitle),
+      routes: {"/addNewProduct": (context) => AddNewProductsPage()},
     );
   }
 }

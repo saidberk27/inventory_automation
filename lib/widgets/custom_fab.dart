@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import '../utils/text_styles.dart';
 
 class CustomFab extends StatelessWidget {
-  const CustomFab({super.key});
+  final String route;
+  const CustomFab({super.key, required this.route});
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
-      onPressed: () {},
+      onPressed: () => Navigator.pushNamed(context, route),
       focusColor: ProjectColors.projectRed,
       backgroundColor: ProjectColors.projectRed,
       hoverColor: ProjectColors.projectBrown,

@@ -45,7 +45,9 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      floatingActionButton: const CustomFab(),
+      floatingActionButton: const CustomFab(
+        route: "/addNewProduct",
+      ),
     );
   }
 
@@ -86,7 +88,39 @@ class _HomePageState extends State<HomePage> {
           title: const Text("Siyah Tişört"),
           subtitle: const Text("Stok: 67"),
           trailing: const Icon(Icons.arrow_forward_ios),
-          onTap: () {},
+          onTap: () {
+            showDialog(
+                context: context,
+                builder: ((context) {
+                  return AlertDialog(
+                    title: const Text('Siyah Tişört'),
+                    content: const Text('Stok: 67'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pop(); // Diyalog penceresini kapatır
+                        },
+                        child: const Text('Stok Düzenle'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pop(); // Diyalog penceresini kapatır
+                        },
+                        child: const Text('Ürünü Düzenle'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pop(); // Diyalog penceresini kapatır
+                        },
+                        child: const Text('Kapat'),
+                      ),
+                    ],
+                  );
+                }));
+          },
         ),
         ListTile(
           leading: Image.asset("assets/images/shirt.png"),
