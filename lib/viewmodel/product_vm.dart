@@ -12,9 +12,11 @@ class ProductViewModel {
 
   Future<List<Map<String, dynamic>>> getAllProducts() async {
     ProjectFirestore db = ProjectFirestore();
-    List<Map<String, dynamic>> productList =
-        await db.readAllDocuments(collectionPath: "/products/");
-    print(productList);
+    List<Map<String, dynamic>> productList = await db.readAllDocumentsWithOrder(
+        collectionPath: "/products/",
+        orderField: "timestamp",
+        isDescending: true);
+
     return productList;
   }
 }

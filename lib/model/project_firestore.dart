@@ -10,6 +10,7 @@ class ProjectFirestore {
   Future<void> addDocument(
       {required String collectionPath,
       required Map<String, dynamic> document}) async {
+    document.addAll({"timestamp": Timestamp.fromDate(DateTime.now())});
     db.collection(collectionPath).add(document).then((documentSnapshot) =>
         print("Added Data with ID: ${documentSnapshot.id}"));
   }
@@ -65,9 +66,15 @@ class ProjectFirestore {
   }
 
   Future<List<Map<String, dynamic>>> readAllDocumentsWithOrder(
-      {required String collectionPath, required bool ascending}) async {
+      {required String collectionPath,
+      required bool isDescending,
+      required String orderField}) async {
     List<Map<String, dynamic>> documentMaps = [];
-    await db.collection(collectionPath).get().then(
+    await db
+        .collection(collectionPath)
+        .orderBy(orderField, descending: isDescending)
+        .get()
+        .then(
       (querySnapshot) {
         print("Successfully completed");
         for (var docSnapshot in querySnapshot.docs) {

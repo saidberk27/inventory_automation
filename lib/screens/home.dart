@@ -1,3 +1,4 @@
+import 'package:envanter_kontrol/local_functions/time.dart';
 import 'package:envanter_kontrol/model/project_firestore.dart';
 import 'package:envanter_kontrol/utils/colors.dart';
 import 'package:envanter_kontrol/utils/text_styles.dart';
