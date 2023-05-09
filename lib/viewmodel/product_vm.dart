@@ -19,4 +19,13 @@ class ProductViewModel {
 
     return productList;
   }
+
+  void updateStockInfo(
+      {required String docID, required String newStock}) async {
+    //int InewStock = int.parse(newStock);
+    ProjectFirestore db = ProjectFirestore();
+    int newStockFinal = int.parse(newStock);
+    db.updateDocument(
+        path: "products", docID: docID, newData: {"stockCount": newStockFinal});
+  }
 }

@@ -19,10 +19,12 @@ class ProjectFirestore {
       {required String path,
       required String docID,
       required Map<String, dynamic> newData}) async {
-    final docRef = db.collection(path).doc(docID);
-    docRef.update(newData).then(
-        (value) => print("DocumentSnapshot successfully updated!"),
-        onError: (e) => print("Error updating document $e"));
+    DocumentReference docRef =
+        FirebaseFirestore.instance.collection(path).doc(docID);
+    docRef
+        .update(newData)
+        .then((value) => print('Document updated'))
+        .catchError((error) => print('Failed to update document: $error'));
   }
 
   Future<void> deleteDocument(

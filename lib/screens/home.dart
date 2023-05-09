@@ -111,7 +111,8 @@ class _HomePageState extends State<HomePage> {
             productDialog(
                 title: productList[index]["title"],
                 stock: productList[index]["stockCount"],
-                descrption: productList[index]["description"]);
+                descrption: productList[index]["description"],
+                productID: productList[index]["id"]);
           },
         );
       },
@@ -119,7 +120,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<dynamic> productDialog(
-      {required String title, required int stock, required String descrption}) {
+      {required String title,
+      required int stock,
+      required String descrption,
+      required String productID}) {
     return showDialog(
         context: context,
         builder: ((context) {
@@ -138,7 +142,7 @@ class _HomePageState extends State<HomePage> {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(); // Diyalog penceresini kapatır
-                  enterNewStockInfo(context);
+                  enterNewStockInfo(context, productID: productID);
                 },
                 child: const Text('Stok Düzenle'),
               ),
@@ -212,7 +216,9 @@ class _HomePageState extends State<HomePage> {
         }));
   }
 
-  Future<dynamic> enterNewStockInfo(BuildContext context) {
+  Future<dynamic> enterNewStockInfo(BuildContext context,
+      {required String productID}) {
+    TextEditingController _stockController = TextEditingController();
     return showDialog(
       context: context,
       builder: (context) {
@@ -222,15 +228,22 @@ class _HomePageState extends State<HomePage> {
             height: 100,
             child: Column(
               children: [
-                const SizedBox(
+                SizedBox(
                   width: 50,
-                  child: TextField(
+                  child: TextFormField(
+                    controller: _stockController,
                     textAlign: TextAlign.center,
                   ),
                 ),
                 const SizedBox(height: 20),
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      ProductViewModel productViewModel = ProductViewModel();
+                      productViewModel.updateStockInfo(
+                          docID: productID, newStock: _stockController.text);
+                      setState(() {});
+                      Navigator.of(context).pop();
+                    },
                     child: const Text("Stok Bilgisini Güncelle"))
               ],
             ),
