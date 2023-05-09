@@ -1,4 +1,4 @@
-import 'package:envanter_kontrol/local_functions/time.dart';
+import 'package:envanter_kontrol/local_functions/product_stats.dart';
 import 'package:envanter_kontrol/model/project_firestore.dart';
 import 'package:envanter_kontrol/utils/colors.dart';
 import 'package:envanter_kontrol/utils/text_styles.dart';
@@ -18,11 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Map<String, double> dataMap = {
-    "Gömlek": 23,
-    "Tişört": 67,
-    "Eşofman Altı": 97,
-  };
+  late Map<String, double> dataMap;
 
   @override
   Widget build(BuildContext context) {
@@ -30,24 +26,42 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                flex: 1,
-                child: headerSection(),
+      body: FutureBuilder(
+        //OUTER FUTURE BUILDER FOR FETCH PRODUCTS
+        future: ProductViewModel().getAllProducts(),
+        builder: (context, snapshotOUT) {
+          if (snapshotOUT.hasData) {
+            List<Map<String, dynamic>>? productList = snapshotOUT.data;
+            //INITIALIZING STATS AND TOTAL STOCK COUNT
+            int totalNumberOfStocks = ProductStats(productList: productList!)
+                .calculateTotalStockCount();
+            dataMap = ProductStats(productList: productList)
+                .createPieChartDataMap()
+                .cast<String, double>();
+            //----------------------------------------
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: headerSection(totalStocks: totalNumberOfStocks),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: productsListView(productList: productList),
+                    ),
+                    Expanded(flex: 3, child: pieChart(dataMap: dataMap))
+                  ],
+                ),
               ),
-              Expanded(
-                flex: 4,
-                child: productsListView(),
-              ),
-              Expanded(flex: 3, child: pieChart(dataMap: dataMap))
-            ],
-          ),
-        ),
+            );
+          } else {
+            return CircularProgressIndicator();
+          }
+        },
       ),
       floatingActionButton: const CustomFab(
         route: "/addNewProduct",
@@ -60,7 +74,7 @@ class _HomePageState extends State<HomePage> {
         animationDuration: const Duration(seconds: 2),
       );
 
-  Row headerSection() {
+  Row headerSection({required int totalStocks}) {
     return Row(
       children: [
         Expanded(
@@ -74,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                   textAlign: TextAlign.center,
                 ),
                 Text(
-                  "Toplam Stok: 345",
+                  "Toplam Stok: $totalStocks",
                   style: ProjectTextStyle.redMedium,
                 )
               ],
@@ -84,34 +98,22 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  FutureBuilder productsListView() {
-    return FutureBuilder(
-      future: ProductViewModel().getAllProducts(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          List<Map<String, dynamic>> productList = snapshot.data;
-          return ListView.builder(
-            itemCount: productList.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: Image.asset("assets/images/tshirt.png"),
-                title: Text(productList[index]["title"]),
-                subtitle: Text("Stok: ${productList[index]["stockCount"]}"),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  productDialog(
-                      title: productList[index]["title"],
-                      stock: productList[index]["stockCount"],
-                      descrption: productList[index]["description"]);
-                  ProductViewModel productViewModel = ProductViewModel();
-                  productViewModel.getAllProducts();
-                },
-              );
-            },
-          );
-        } else {
-          return CircularProgressIndicator();
-        }
+  ListView productsListView({required List productList}) {
+    return ListView.builder(
+      itemCount: productList.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          leading: Image.asset("assets/images/tshirt.png"),
+          title: Text(productList[index]["title"]),
+          subtitle: Text("Stok: ${productList[index]["stockCount"]}"),
+          trailing: const Icon(Icons.arrow_forward_ios),
+          onTap: () {
+            productDialog(
+                title: productList[index]["title"],
+                stock: productList[index]["stockCount"],
+                descrption: productList[index]["description"]);
+          },
+        );
       },
     );
   }

@@ -1,4 +1,3 @@
-import 'package:envanter_kontrol/local_functions/time.dart';
 import 'package:envanter_kontrol/screens/add_new_product.dart';
 import 'package:envanter_kontrol/screens/home.dart';
 import 'package:flutter/material.dart';
