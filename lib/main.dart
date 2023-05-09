@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: ProjectColors.customPrimarySwatch,
       ),
       home: HomePage(title: _appTitle),
-      routes: {"/addNewProduct": (context) => const AddNewProductsPage()},
+      routes: {"/addNewProduct": (context) => AddNewProductsPage()},
     );
   }
 }

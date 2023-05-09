@@ -10,8 +10,6 @@ class ProjectFirestore {
   Future<void> addDocument(
       {required String collectionPath,
       required Map<String, dynamic> document}) async {
-    final data = {"name": "Tokyo", "country": "Japan"};
-
     db.collection(collectionPath).add(document).then((documentSnapshot) =>
         print("Added Data with ID: ${documentSnapshot.id}"));
   }
@@ -47,20 +45,41 @@ class ProjectFirestore {
     return data;
   }
 
-  Future<List<Map<String, dynamic>>> readMultipleDocuments(
+  Future<List<Map<String, dynamic>>> readAllDocuments(
       {required String collectionPath}) async {
     List<Map<String, dynamic>> documentMaps = [];
-    db.collection(collectionPath).get().then(
+    await db.collection(collectionPath).get().then(
       (querySnapshot) {
         print("Successfully completed");
         for (var docSnapshot in querySnapshot.docs) {
-          documentMaps.add(docSnapshot.data() as Map<String, dynamic>);
-          print('${docSnapshot.id} => ${docSnapshot.data()}');
+          Map<String, dynamic> documentMap =
+              docSnapshot.data() as Map<String, dynamic>;
+          documentMap.addAll({"id": docSnapshot.id});
+          documentMaps.add(documentMap);
+          //print('${docSnapshot.id} => ${docSnapshot.data()}');
         }
       },
       onError: (e) => print("Error completing: $e"),
     );
+    return documentMaps;
+  }
 
+  Future<List<Map<String, dynamic>>> readAllDocumentsWithOrder(
+      {required String collectionPath, required bool ascending}) async {
+    List<Map<String, dynamic>> documentMaps = [];
+    await db.collection(collectionPath).get().then(
+      (querySnapshot) {
+        print("Successfully completed");
+        for (var docSnapshot in querySnapshot.docs) {
+          Map<String, dynamic> documentMap =
+              docSnapshot.data() as Map<String, dynamic>;
+          documentMap.addAll({"id": docSnapshot.id});
+          documentMaps.add(documentMap);
+          //print('${docSnapshot.id} => ${docSnapshot.data()}');
+        }
+      },
+      onError: (e) => print("Error completing: $e"),
+    );
     return documentMaps;
   }
 }

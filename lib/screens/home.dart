@@ -1,7 +1,10 @@
+import 'package:envanter_kontrol/model/project_firestore.dart';
 import 'package:envanter_kontrol/utils/colors.dart';
 import 'package:envanter_kontrol/utils/text_styles.dart';
+import 'package:envanter_kontrol/viewmodel/product_vm.dart';
 import 'package:envanter_kontrol/widgets/custom_fab.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:pie_chart/pie_chart.dart';
 
 class HomePage extends StatefulWidget {
@@ -80,47 +83,54 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  ListView productsListView() {
-    return ListView(
-      children: [
-        ListTile(
-          leading: Image.asset("assets/images/tshirt.png"),
-          title: const Text("Siyah Tişört"),
-          subtitle: const Text("Stok: 67"),
-          trailing: const Icon(Icons.arrow_forward_ios),
-          onTap: () {
-            productDialog(title: "Siyah Tişört", stock: 67);
-          },
-        ),
-        ListTile(
-          leading: Image.asset("assets/images/shirt.png"),
-          title: const Text("Siyah Gömlek"),
-          subtitle: const Text("Stok: 23"),
-          trailing: const Icon(Icons.arrow_forward_ios),
-          onTap: () {
-            productDialog(title: "Siyah Gömlek", stock: 23);
-          },
-        ),
-        ListTile(
-          leading: Image.asset("assets/images/pants.png"),
-          title: const Text("Siyah Eşofman Altı"),
-          subtitle: const Text("Stok: 97"),
-          trailing: const Icon(Icons.arrow_forward_ios),
-          onTap: () {
-            productDialog(title: "Siyah Eşofman Altı", stock: 97);
-          },
-        ),
-      ],
+  FutureBuilder productsListView() {
+    return FutureBuilder(
+      future: ProductViewModel().getAllProducts(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List<Map<String, dynamic>> productList = snapshot.data;
+          return ListView.builder(
+            itemCount: productList.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: Image.asset("assets/images/tshirt.png"),
+                title: Text(productList[index]["title"]),
+                subtitle: Text("Stok: ${productList[index]["stockCount"]}"),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onTap: () {
+                  productDialog(
+                      title: productList[index]["title"],
+                      stock: productList[index]["stockCount"],
+                      descrption: productList[index]["description"]);
+                  ProductViewModel productViewModel = ProductViewModel();
+                  productViewModel.getAllProducts();
+                },
+              );
+            },
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
     );
   }
 
-  Future<dynamic> productDialog({required String title, required int stock}) {
+  Future<dynamic> productDialog(
+      {required String title, required int stock, required String descrption}) {
     return showDialog(
         context: context,
         builder: ((context) {
           return AlertDialog(
             title: Text(title),
-            content: Text('Stok: ${stock.toString()}'),
+            content: SizedBox(
+              height: MediaQuery.of(context).size.height / 8,
+              child: Column(
+                children: [
+                  Text('Stok: ${stock.toString()}'),
+                  Expanded(child: Text(descrption))
+                ],
+              ),
+            ),
             actions: [
               TextButton(
                 onPressed: () {
