@@ -89,37 +89,7 @@ class _HomePageState extends State<HomePage> {
           subtitle: const Text("Stok: 67"),
           trailing: const Icon(Icons.arrow_forward_ios),
           onTap: () {
-            showDialog(
-                context: context,
-                builder: ((context) {
-                  return AlertDialog(
-                    title: const Text('Siyah Tişört'),
-                    content: const Text('Stok: 67'),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context)
-                              .pop(); // Diyalog penceresini kapatır
-                        },
-                        child: const Text('Stok Düzenle'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context)
-                              .pop(); // Diyalog penceresini kapatır
-                        },
-                        child: const Text('Ürünü Düzenle'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context)
-                              .pop(); // Diyalog penceresini kapatır
-                        },
-                        child: const Text('Kapat'),
-                      ),
-                    ],
-                  );
-                }));
+            productDialog(title: "Siyah Tişört", stock: 67);
           },
         ),
         ListTile(
@@ -127,16 +97,140 @@ class _HomePageState extends State<HomePage> {
           title: const Text("Siyah Gömlek"),
           subtitle: const Text("Stok: 23"),
           trailing: const Icon(Icons.arrow_forward_ios),
-          onTap: () {},
+          onTap: () {
+            productDialog(title: "Siyah Gömlek", stock: 23);
+          },
         ),
         ListTile(
           leading: Image.asset("assets/images/pants.png"),
           title: const Text("Siyah Eşofman Altı"),
           subtitle: const Text("Stok: 97"),
           trailing: const Icon(Icons.arrow_forward_ios),
-          onTap: () {},
+          onTap: () {
+            productDialog(title: "Siyah Eşofman Altı", stock: 97);
+          },
         ),
       ],
+    );
+  }
+
+  Future<dynamic> productDialog({required String title, required int stock}) {
+    return showDialog(
+        context: context,
+        builder: ((context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text('Stok: ${stock.toString()}'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Diyalog penceresini kapatır
+                  enterNewStockInfo(context);
+                },
+                child: const Text('Stok Düzenle'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Diyalog penceresini kapatır
+
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text("Ürünü Düzenle"),
+                        content: SizedBox(
+                          height: 100,
+                          child: Column(
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: TextFormField(
+                                  decoration: InputDecoration(
+                                    hintText: "ÜRÜN ADI",
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(24)),
+                                    prefixIcon: const Icon(Icons.abc),
+                                  ),
+                                ),
+                              ),
+                              const Expanded(flex: 1, child: SizedBox()),
+                              Expanded(
+                                flex: 3,
+                                child: TextFormField(
+                                  decoration: InputDecoration(
+                                    hintText: "ÜRÜN AÇIKLAMASI",
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(24)),
+                                    prefixIcon: const Icon(Icons.abc),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("Ürünü Güncelle")),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("İptal Et"))
+                        ],
+                      );
+                    },
+                  ); // Diyalog penceresini kapatır
+                },
+                child: const Text('Ürünü Düzenle'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Diyalog penceresini kapatır
+                },
+                child: const Text('Kapat'),
+              ),
+            ],
+          );
+        }));
+  }
+
+  Future<dynamic> enterNewStockInfo(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Yeni Stok Bilgisi Gir"),
+          content: SizedBox(
+            height: 100,
+            child: Column(
+              children: [
+                const SizedBox(
+                  width: 50,
+                  child: TextField(
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                TextButton(
+                    onPressed: () {},
+                    child: const Text("Stok Bilgisini Güncelle"))
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("İptal Et"))
+          ],
+        );
+      },
     );
   }
 

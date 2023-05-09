@@ -8,27 +8,27 @@ class AddNewProductsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Yeni Ürün Ekle"),
+        title: const Text("Yeni Ürün Ekle"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Center(
-            child: Container(
+            child: SizedBox(
           width: MediaQuery.of(context).size.width / 1.5,
           child: Form(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 titleAndInput(title: "Ürün Adı"),
-                Divider(thickness: 2),
+                const Divider(thickness: 2),
                 titleAndInput(title: "Ürün Açıklaması"),
-                Divider(thickness: 2),
+                const Divider(thickness: 2),
                 titleAndInput(title: "Ürün Stok Sayısı"),
-                Container(
+                SizedBox(
                     width: 200,
                     height: 100,
                     child: ElevatedButton(
-                        onPressed: () {}, child: Text("Yeni Ürün Ekle")))
+                        onPressed: () {}, child: const Text("Yeni Ürün Ekle")))
               ],
             ),
           ),
@@ -44,7 +44,7 @@ class AddNewProductsPage extends StatelessWidget {
           title,
           style: ProjectTextStyle.grey3SmallStrong,
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         TextFormField(
           decoration: InputDecoration(
             hintText: title,
