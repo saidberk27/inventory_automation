@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "44107571506",
+    "project_id": "cansgomlek",
+    "storage_bucket": "cansgomlek.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44107571506:android:1f84b6df934249f0b2772b",
+        "android_client_info": {
+          "package_name": "com.example.envanter_kontrol"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "44107571506-6c8fjk6v92nou366bd1ka63g0v22mif6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFbS_-nKYU4z9QIfqUhzqzeylrfPyK1Ck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "44107571506-6c8fjk6v92nou366bd1ka63g0v22mif6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
