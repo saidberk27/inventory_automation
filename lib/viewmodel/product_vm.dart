@@ -28,4 +28,30 @@ class ProductViewModel {
     db.updateDocument(
         path: "products", docID: docID, newData: {"stockCount": newStockFinal});
   }
+
+  void deleteProduct({required String docID}) {
+    ProjectFirestore db = ProjectFirestore();
+    db.deleteDocument(path: "products/", docID: docID);
+  }
+
+  void updateProductInfo(
+      {required String docID,
+      required String productTitle,
+      required String productDescrption}) async {
+    Map<String, dynamic> newProductInfo = {};
+
+    if (productTitle == "" && productDescrption != "") {
+      newProductInfo = {"description": productDescrption};
+    } else if (productTitle != "" && productDescrption == "") {
+      newProductInfo = {"title": productTitle};
+    } else {
+      newProductInfo = {
+        "title": productTitle,
+        "description": productDescrption
+      };
+    }
+    ProjectFirestore db = ProjectFirestore();
+
+    db.updateDocument(path: "products", docID: docID, newData: newProductInfo);
+  }
 }

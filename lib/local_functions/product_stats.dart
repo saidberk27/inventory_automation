@@ -19,6 +19,9 @@ class ProductStats {
 
   Map<String, int> createPieChartDataMap() {
     Map<String, int> pieChartMap = {};
+    if (productList.length <= 0) {
+      return {"No Product Found": 0};
+    }
     for (var product in productList) {
       String productName = product["title"];
       int productCount = product["stockCount"].toInt();

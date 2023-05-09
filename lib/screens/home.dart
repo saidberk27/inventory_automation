@@ -148,6 +148,10 @@ class _HomePageState extends State<HomePage> {
               ),
               TextButton(
                 onPressed: () {
+                  TextEditingController _productTitleController =
+                      TextEditingController();
+                  TextEditingController _productDescriptionController =
+                      TextEditingController();
                   Navigator.of(context).pop(); // Diyalog penceresini kapatır
 
                   showDialog(
@@ -162,8 +166,9 @@ class _HomePageState extends State<HomePage> {
                               Expanded(
                                 flex: 3,
                                 child: TextFormField(
+                                  controller: _productTitleController,
                                   decoration: InputDecoration(
-                                    hintText: "ÜRÜN ADI",
+                                    hintText: "YENİ ÜRÜN ADI",
                                     border: OutlineInputBorder(
                                         borderRadius:
                                             BorderRadius.circular(24)),
@@ -175,8 +180,9 @@ class _HomePageState extends State<HomePage> {
                               Expanded(
                                 flex: 3,
                                 child: TextFormField(
+                                  controller: _productDescriptionController,
                                   decoration: InputDecoration(
-                                    hintText: "ÜRÜN AÇIKLAMASI",
+                                    hintText: "YENİ ÜRÜN AÇIKLAMASI",
                                     border: OutlineInputBorder(
                                         borderRadius:
                                             BorderRadius.circular(24)),
@@ -190,6 +196,24 @@ class _HomePageState extends State<HomePage> {
                         actions: [
                           TextButton(
                               onPressed: () {
+                                ProductViewModel productViewModel =
+                                    ProductViewModel();
+                                productViewModel.deleteProduct(
+                                    docID: productID);
+                                setState(() {});
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("Ürünü Sil")),
+                          TextButton(
+                              onPressed: () {
+                                ProductViewModel productViewModel =
+                                    ProductViewModel();
+                                productViewModel.updateProductInfo(
+                                    docID: productID,
+                                    productTitle: _productTitleController.text,
+                                    productDescrption:
+                                        _productDescriptionController.text);
+                                setState(() {});
                                 Navigator.of(context).pop();
                               },
                               child: const Text("Ürünü Güncelle")),
