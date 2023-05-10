@@ -1,14 +1,27 @@
 import 'package:envanter_kontrol/model/product.dart';
+import 'package:envanter_kontrol/model/project_storage.dart';
 import 'package:envanter_kontrol/screens/home.dart';
+import 'package:envanter_kontrol/utils/colors.dart';
 import 'package:envanter_kontrol/utils/text_styles.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:envanter_kontrol/viewmodel/product_vm.dart';
 
-class AddNewProductsPage extends StatelessWidget {
+class AddNewProductsPage extends StatefulWidget {
   AddNewProductsPage({super.key});
+
+  @override
+  State<AddNewProductsPage> createState() => _AddNewProductsPageState();
+}
+
+class _AddNewProductsPageState extends State<AddNewProductsPage> {
   TextEditingController _productNameController = TextEditingController();
+
   TextEditingController _productDescriptionController = TextEditingController();
+
   TextEditingController _productStockInfoController = TextEditingController();
+  String filename = "";
+  FilePickerResult? result;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,18 +48,20 @@ class AddNewProductsPage extends StatelessWidget {
                 titleAndInput(
                     title: "Ürün Stok Sayısı",
                     textEditingController: _productStockInfoController),
+                filePickerSection(),
                 SizedBox(
                     width: 200,
                     height: 100,
                     child: ElevatedButton(
-                        onPressed: () {
-                          _addNewProduct();
-                          Navigator.of(context).push(PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) {
-                              return HomePage(title: "Ana Sayfa");
-                            },
-                          ));
+                        onPressed: () async {
+                          if (await _addNewProduct()) {
+                            Navigator.of(context).push(PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) {
+                                return HomePage(title: "Ana Sayfa");
+                              },
+                            ));
+                          }
                         },
                         child: const Text("Yeni Ürün Ekle")))
               ],
@@ -54,6 +69,41 @@ class AddNewProductsPage extends StatelessWidget {
           ),
         )),
       ),
+    );
+  }
+
+  Row filePickerSection() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton(
+          onPressed: () async {
+            result = await FilePicker.platform.pickFiles(
+              type: FileType.custom,
+              allowedExtensions: ['jpg', 'png'],
+            );
+
+            if (result != null) {
+              PlatformFile file = result!.files.first;
+              filename = file.name;
+              setState(() {});
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: ProjectColors.projectWhite,
+            side: BorderSide(
+              color: ProjectColors.projectRed,
+              width: 2.0,
+            ),
+          ),
+          child: Text('Dosya Seç', style: ProjectTextStyle.redSmallStrong),
+        ),
+        SizedBox(width: 10),
+        Text(
+          filename,
+          style: ProjectTextStyle.brownSmallStrong,
+        )
+      ],
     );
   }
 
@@ -79,14 +129,25 @@ class AddNewProductsPage extends StatelessWidget {
     );
   }
 
-  void _addNewProduct() {
-    print("Adding new product");
+  Future<bool> _addNewProduct() async {
+    try {
+      String productMediaURL = "";
+      ProductViewModel vm = ProductViewModel();
 
-    Product product = Product(
-        title: _productNameController.text,
-        description: _productDescriptionController.text,
-        stockCount: int.parse(_productStockInfoController.text));
-    ProductViewModel vm = ProductViewModel();
-    vm.addNewProduct(product: product);
+      if (result != null) {
+        productMediaURL = await vm.getMediaURL(result: result!);
+      }
+
+      Product product = Product(
+          title: _productNameController.text,
+          description: _productDescriptionController.text,
+          stockCount: int.parse(_productStockInfoController.text),
+          mediaURL: productMediaURL);
+      vm.addNewProduct(product: product);
+      return true;
+    } catch (e) {
+      print("e");
+      return false;
+    }
   }
 }

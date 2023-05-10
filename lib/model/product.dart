@@ -2,8 +2,10 @@ class Product {
   String title;
   String description;
   int stockCount;
+  String? mediaURL;
 
   Product({
+    this.mediaURL,
     required this.title,
     required this.description,
     required this.stockCount,
@@ -14,6 +16,7 @@ class Product {
       title: json['title'] as String,
       description: json['description'] as String,
       stockCount: json['stockCount'] as int,
+      mediaURL: json['mediaURL'] as String,
     );
   }
 
@@ -22,6 +25,7 @@ class Product {
       'title': title,
       'description': description,
       'stockCount': stockCount,
+      'mediaURL': mediaURL
     };
   }
 }

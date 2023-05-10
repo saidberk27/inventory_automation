@@ -1,10 +1,19 @@
 import 'package:envanter_kontrol/model/product.dart';
 import 'package:envanter_kontrol/model/project_firestore.dart';
+import 'package:envanter_kontrol/model/project_storage.dart';
+import 'package:file_picker/file_picker.dart';
 
 class ProductViewModel {
+  Future<String> getMediaURL({required FilePickerResult result}) async {
+    ProjectStorage storage = ProjectStorage();
+    String URL = await storage.uploadMedia(result);
+    return URL;
+  }
+
   Future<void> addNewProduct({required Product product}) async {
     ProjectFirestore db = ProjectFirestore();
-    print("view modelin içi");
+    ProjectStorage storage = ProjectStorage();
+
     Map<String, dynamic> document = product.toJson();
 
     db.addDocument(collectionPath: "products/", document: document);
