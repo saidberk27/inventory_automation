@@ -86,6 +86,7 @@ class _AddNewProductsPageState extends State<AddNewProductsPage> {
             if (result != null) {
               PlatformFile file = result!.files.first;
               filename = file.name;
+              await Future.delayed(Duration(milliseconds: 500));
               setState(() {});
             }
           },

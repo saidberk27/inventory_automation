@@ -29,38 +29,57 @@ class ProductViewModel {
     return productList;
   }
 
-  void updateStockInfo(
+  Future<bool> updateStockInfo(
       {required String docID, required String newStock}) async {
-    //int InewStock = int.parse(newStock);
-    ProjectFirestore db = ProjectFirestore();
-    int newStockFinal = int.parse(newStock);
-    db.updateDocument(
-        path: "products", docID: docID, newData: {"stockCount": newStockFinal});
+    try {
+      //int InewStock = int.parse(newStock);
+      ProjectFirestore db = ProjectFirestore();
+      int newStockFinal = int.parse(newStock);
+      db.updateDocument(
+          path: "products",
+          docID: docID,
+          newData: {"stockCount": newStockFinal});
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
-  void deleteProduct({required String docID}) {
-    ProjectFirestore db = ProjectFirestore();
-    db.deleteDocument(path: "products/", docID: docID);
+  Future<bool> deleteProduct({required String docID}) async {
+    try {
+      ProjectFirestore db = ProjectFirestore();
+      db.deleteDocument(path: "products/", docID: docID);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
-  void updateProductInfo(
+  Future<bool> updateProductInfo(
       {required String docID,
       required String productTitle,
       required String productDescrption}) async {
-    Map<String, dynamic> newProductInfo = {};
+    try {
+      Map<String, dynamic> newProductInfo = {};
 
-    if (productTitle == "" && productDescrption != "") {
-      newProductInfo = {"description": productDescrption};
-    } else if (productTitle != "" && productDescrption == "") {
-      newProductInfo = {"title": productTitle};
-    } else {
-      newProductInfo = {
-        "title": productTitle,
-        "description": productDescrption
-      };
+      if (productTitle == "" && productDescrption != "") {
+        newProductInfo = {"description": productDescrption};
+      } else if (productTitle != "" && productDescrption == "") {
+        newProductInfo = {"title": productTitle};
+      } else {
+        newProductInfo = {
+          "title": productTitle,
+          "description": productDescrption
+        };
+      }
+      ProjectFirestore db = ProjectFirestore();
+
+      db.updateDocument(
+          path: "products", docID: docID, newData: newProductInfo);
+
+      return true;
+    } catch (e) {
+      return false;
     }
-    ProjectFirestore db = ProjectFirestore();
-
-    db.updateDocument(path: "products", docID: docID, newData: newProductInfo);
   }
 }

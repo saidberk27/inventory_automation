@@ -53,7 +53,11 @@ class _HomePageState extends State<HomePage> {
                       flex: 4,
                       child: productsListView(productList: productList),
                     ),
-                    Expanded(flex: 3, child: pieChart(dataMap: dataMap))
+                    Expanded(flex: 3, child: pieChart(dataMap: dataMap)),
+                    Text(
+                      "Said Berk © HGT AJANS 2023",
+                      style: TextStyle(fontSize: 8),
+                    )
                   ],
                 ),
               ),
@@ -221,25 +225,33 @@ class _HomePageState extends State<HomePage> {
                         ),
                         actions: [
                           TextButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 ProductViewModel productViewModel =
                                     ProductViewModel();
-                                productViewModel.deleteProduct(
-                                    docID: productID);
-                                setState(() {});
+                                if (await productViewModel.deleteProduct(
+                                    docID: productID)) {
+                                  await Future.delayed(
+                                      Duration(milliseconds: 500));
+                                  setState(() {});
+                                }
+
                                 Navigator.of(context).pop();
                               },
                               child: const Text("Ürünü Sil")),
                           TextButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 ProductViewModel productViewModel =
                                     ProductViewModel();
-                                productViewModel.updateProductInfo(
+                                if (await productViewModel.updateProductInfo(
                                     docID: productID,
                                     productTitle: _productTitleController.text,
                                     productDescrption:
-                                        _productDescriptionController.text);
-                                setState(() {});
+                                        _productDescriptionController.text)) {
+                                  await Future.delayed(
+                                      Duration(milliseconds: 500));
+                                  setState(() {});
+                                }
+
                                 Navigator.of(context).pop();
                               },
                               child: const Text("Ürünü Güncelle")),
@@ -287,11 +299,15 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(height: 20),
                 TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       ProductViewModel productViewModel = ProductViewModel();
-                      productViewModel.updateStockInfo(
-                          docID: productID, newStock: _stockController.text);
-                      setState(() {});
+                      if (await productViewModel.updateStockInfo(
+                          docID: productID, newStock: _stockController.text)) {
+                        await Future.delayed(Duration(
+                            milliseconds: 500)); // state updates too early
+                        setState(() {});
+                      }
+
                       Navigator.of(context).pop();
                     },
                     child: const Text("Stok Bilgisini Güncelle"))
