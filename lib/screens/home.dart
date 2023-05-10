@@ -93,7 +93,6 @@ class _HomePageState extends State<HomePage> {
                 )
               ],
             )),
-        Expanded(flex: 1, child: searchTextField()),
       ],
     );
   }
@@ -308,30 +307,6 @@ class _HomePageState extends State<HomePage> {
           ],
         );
       },
-    );
-  }
-
-  TextField searchTextField() {
-    return TextField(
-      textAlign: TextAlign.center,
-      textAlignVertical: TextAlignVertical.center,
-      style: ProjectTextStyle.redSmallStrong,
-      decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.search),
-          suffix: IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.send,
-                color: ProjectColors.projectRed,
-              )),
-          hintText: "Ara...",
-          focusedBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(width: 5, color: ProjectColors.projectRed)),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: const BorderRadius.all(Radius.circular(24)),
-              borderSide:
-                  BorderSide(width: 5, color: ProjectColors.projectRed))),
     );
   }
 }
