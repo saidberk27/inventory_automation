@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
       itemCount: productList.length,
       itemBuilder: (context, index) {
         return ListTile(
-          leading: Image.asset("assets/images/tshirt.png"),
+          leading: leadingImgCustom(productList, index),
           title: Text(productList[index]["title"]),
           subtitle: Text("Stok: ${productList[index]["stockCount"]}"),
           trailing: const Icon(Icons.arrow_forward_ios),
@@ -112,29 +112,56 @@ class _HomePageState extends State<HomePage> {
                 title: productList[index]["title"],
                 stock: productList[index]["stockCount"],
                 descrption: productList[index]["description"],
-                productID: productList[index]["id"]);
+                productID: productList[index]["id"],
+                mediaURL: productList[index]["mediaURL"]);
           },
         );
       },
     );
   }
 
+  Container leadingImgCustom(List<dynamic> productList, int index) {
+    return Container(
+        width: 75,
+        height: 100,
+        child: productList[index]["mediaURL"] != ""
+            ? Image.network(
+                productList[index]["mediaURL"],
+                fit: BoxFit.fill,
+              )
+            : Image.asset("assets/images/shirt.png"));
+  }
+
   Future<dynamic> productDialog(
       {required String title,
       required int stock,
       required String descrption,
-      required String productID}) {
+      required String productID,
+      required String mediaURL}) {
     return showDialog(
         context: context,
         builder: ((context) {
           return AlertDialog(
             title: Text(title),
+            contentPadding: EdgeInsets.all(20),
             content: SizedBox(
-              height: MediaQuery.of(context).size.height / 8,
+              height: MediaQuery.of(context).size.height / 4,
               child: Column(
+                mainAxisSize: MainAxisSize.min, // eklenen mainAxisSize
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Stok: ${stock.toString()}'),
-                  Expanded(child: Text(descrption))
+                  Text(descrption),
+                  SizedBox(
+                    height: 100,
+                    width: 100,
+                    child: mediaURL != ""
+                        ? Image.network(
+                            mediaURL,
+                            fit: BoxFit.fill,
+                          )
+                        : Image.asset("assets/images/shirt.png"),
+                  ),
                 ],
               ),
             ),
