@@ -1,25 +1,27 @@
 import 'package:envanter_kontrol/model/product.dart';
-import 'package:envanter_kontrol/model/project_storage.dart';
 import 'package:envanter_kontrol/screens/home.dart';
 import 'package:envanter_kontrol/utils/colors.dart';
 import 'package:envanter_kontrol/utils/text_styles.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:envanter_kontrol/viewmodel/product_vm.dart';
 
 class AddNewProductsPage extends StatefulWidget {
-  AddNewProductsPage({super.key});
+  const AddNewProductsPage({super.key});
 
   @override
   State<AddNewProductsPage> createState() => _AddNewProductsPageState();
 }
 
 class _AddNewProductsPageState extends State<AddNewProductsPage> {
-  TextEditingController _productNameController = TextEditingController();
+  final TextEditingController _productNameController = TextEditingController();
 
-  TextEditingController _productDescriptionController = TextEditingController();
+  final TextEditingController _productDescriptionController =
+      TextEditingController();
 
-  TextEditingController _productStockInfoController = TextEditingController();
+  final TextEditingController _productStockInfoController =
+      TextEditingController();
   String filename = "";
   FilePickerResult? result;
   @override
@@ -58,7 +60,7 @@ class _AddNewProductsPageState extends State<AddNewProductsPage> {
                             Navigator.of(context).push(PageRouteBuilder(
                               pageBuilder:
                                   (context, animation, secondaryAnimation) {
-                                return HomePage(title: "Ana Sayfa");
+                                return const HomePage(title: "Ana Sayfa");
                               },
                             ));
                           }
@@ -86,7 +88,7 @@ class _AddNewProductsPageState extends State<AddNewProductsPage> {
             if (result != null) {
               PlatformFile file = result!.files.first;
               filename = file.name;
-              await Future.delayed(Duration(milliseconds: 500));
+              await Future.delayed(const Duration(milliseconds: 500));
               setState(() {});
             }
           },
@@ -99,7 +101,7 @@ class _AddNewProductsPageState extends State<AddNewProductsPage> {
           ),
           child: Text('Dosya Seç', style: ProjectTextStyle.redSmallStrong),
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         Text(
           filename,
           style: ProjectTextStyle.brownSmallStrong,
@@ -147,7 +149,9 @@ class _AddNewProductsPageState extends State<AddNewProductsPage> {
       vm.addNewProduct(product: product);
       return true;
     } catch (e) {
-      print("e");
+      if (kDebugMode) {
+        print("e");
+      }
       return false;
     }
   }

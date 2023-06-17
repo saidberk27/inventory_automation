@@ -1,5 +1,6 @@
 import 'package:envanter_kontrol/screens/add_new_product.dart';
 import 'package:envanter_kontrol/screens/home.dart';
+import 'package:envanter_kontrol/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'utils/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: ProjectColors.customPrimarySwatch,
       ),
-      home: HomePage(title: _appTitle),
+      home: LoginPage(),
       routes: {"/addNewProduct": (context) => AddNewProductsPage()},
     );
   }

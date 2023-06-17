@@ -1,6 +1,7 @@
 import 'package:envanter_kontrol/local_functions/product_stats.dart';
 import 'package:envanter_kontrol/model/project_firestore.dart';
 import 'package:envanter_kontrol/utils/colors.dart';
+import 'package:envanter_kontrol/widgets/footer.dart';
 import 'package:envanter_kontrol/utils/text_styles.dart';
 import 'package:envanter_kontrol/viewmodel/product_vm.dart';
 import 'package:envanter_kontrol/widgets/custom_fab.dart';
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomSheet: CustomFooter(),
       appBar: AppBar(
         title: Text(widget.title),
       ),
