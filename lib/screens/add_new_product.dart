@@ -60,7 +60,7 @@ class _AddNewProductsPageState extends State<AddNewProductsPage> {
                             Navigator.of(context).push(PageRouteBuilder(
                               pageBuilder:
                                   (context, animation, secondaryAnimation) {
-                                return const HomePage(title: "Ana Sayfa");
+                                return const HomePage();
                               },
                             ));
                           }

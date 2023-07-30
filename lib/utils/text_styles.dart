@@ -28,100 +28,100 @@ class ProjectTextStyle {
       fontWeight: FontWeight.bold);
 //--------------------------------------BROWN
   static final TextStyle brownSmall =
-      TextStyle(color: ProjectColors.projectBrown, fontSize: 16);
+      TextStyle(color: ProjectColors.projectOrange, fontSize: 16);
 
   static final TextStyle brownSmallStrong = TextStyle(
-      color: ProjectColors.projectBrown,
+      color: ProjectColors.projectOrange,
       fontSize: 16,
       fontWeight: FontWeight.bold);
 
   static final TextStyle brownMedium =
-      TextStyle(color: ProjectColors.projectBrown, fontSize: 20);
+      TextStyle(color: ProjectColors.projectOrange, fontSize: 20);
 
   static final TextStyle brownMediumStrong = TextStyle(
-      color: ProjectColors.projectBrown,
+      color: ProjectColors.projectOrange,
       fontSize: 20,
       fontWeight: FontWeight.bold);
 
   static final TextStyle brownBig =
-      TextStyle(color: ProjectColors.projectBrown, fontSize: 24);
+      TextStyle(color: ProjectColors.projectOrange, fontSize: 24);
 
   static final TextStyle brownBigStrong = TextStyle(
-      color: ProjectColors.projectBrown,
+      color: ProjectColors.projectOrange,
       fontSize: 24,
       fontWeight: FontWeight.bold);
   //--------------------------------------GREY1
   static final TextStyle grey1Small =
-      TextStyle(color: ProjectColors.projectGrey1, fontSize: 16);
+      TextStyle(color: ProjectColors.projectGrey, fontSize: 16);
 
   static final TextStyle grey1SmallStrong = TextStyle(
-      color: ProjectColors.projectGrey1,
+      color: ProjectColors.projectGrey,
       fontSize: 16,
       fontWeight: FontWeight.bold);
 
   static final TextStyle grey1Medium =
-      TextStyle(color: ProjectColors.projectGrey1, fontSize: 20);
+      TextStyle(color: ProjectColors.projectGrey, fontSize: 20);
 
   static final TextStyle grey1MediumStrong = TextStyle(
-      color: ProjectColors.projectGrey1,
+      color: ProjectColors.projectGrey,
       fontSize: 20,
       fontWeight: FontWeight.bold);
 
   static final TextStyle grey1Big =
-      TextStyle(color: ProjectColors.projectGrey1, fontSize: 24);
+      TextStyle(color: ProjectColors.projectGrey, fontSize: 24);
 
   static final TextStyle grey1BigStrong = TextStyle(
-      color: ProjectColors.projectGrey1,
+      color: ProjectColors.projectGrey,
       fontSize: 24,
       fontWeight: FontWeight.bold);
   //--------------------------------------GREY2
 
   static final TextStyle grey2Small =
-      TextStyle(color: ProjectColors.projectGrey2, fontSize: 16);
+      TextStyle(color: ProjectColors.projectBlue1, fontSize: 16);
 
   static final TextStyle grey2SmallStrong = TextStyle(
-      color: ProjectColors.projectGrey2,
+      color: ProjectColors.projectBlue1,
       fontSize: 16,
       fontWeight: FontWeight.bold);
 
   static final TextStyle grey2Medium =
-      TextStyle(color: ProjectColors.projectGrey2, fontSize: 20);
+      TextStyle(color: ProjectColors.projectBlue1, fontSize: 20);
 
   static final TextStyle grey2MediumStrong = TextStyle(
-      color: ProjectColors.projectGrey2,
+      color: ProjectColors.projectBlue1,
       fontSize: 20,
       fontWeight: FontWeight.bold);
 
   static final TextStyle grey2Big =
-      TextStyle(color: ProjectColors.projectGrey2, fontSize: 24);
+      TextStyle(color: ProjectColors.projectBlue1, fontSize: 24);
 
   static final TextStyle grey2BigStrong = TextStyle(
-      color: ProjectColors.projectGrey2,
+      color: ProjectColors.projectBlue1,
       fontSize: 24,
       fontWeight: FontWeight.bold);
 
   //---------------------------------------GREY3
   static final TextStyle grey3Small =
-      TextStyle(color: ProjectColors.projectGrey3, fontSize: 16);
+      TextStyle(color: ProjectColors.projectBlue2, fontSize: 16);
 
   static final TextStyle grey3SmallStrong = TextStyle(
-      color: ProjectColors.projectGrey3,
+      color: ProjectColors.projectBlue2,
       fontSize: 16,
       fontWeight: FontWeight.bold);
 
   static final TextStyle grey3Medium =
-      TextStyle(color: ProjectColors.projectGrey3, fontSize: 20);
+      TextStyle(color: ProjectColors.projectBlue2, fontSize: 20);
 
   static final TextStyle grey3MediumStrong = TextStyle(
-      color: ProjectColors.projectGrey3,
+      color: ProjectColors.projectBlue2,
       fontSize: 20,
       fontWeight: FontWeight.bold);
 
   static final TextStyle grey3Big =
-      TextStyle(color: ProjectColors.projectGrey3, fontSize: 24);
+      TextStyle(color: ProjectColors.projectBlue2, fontSize: 24);
 
   static final TextStyle grey3BigStrong = TextStyle(
-      color: ProjectColors.projectGrey3,
+      color: ProjectColors.projectBlue2,
       fontSize: 24,
       fontWeight: FontWeight.bold);
 

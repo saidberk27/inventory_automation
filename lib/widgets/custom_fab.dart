@@ -11,9 +11,9 @@ class CustomFab extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
       onPressed: () => Navigator.pushNamed(context, route),
-      focusColor: ProjectColors.projectGrey3,
-      backgroundColor: ProjectColors.projectGrey3,
-      hoverColor: ProjectColors.projectBrown,
+      focusColor: ProjectColors.projectBlue2,
+      backgroundColor: ProjectColors.projectBlue2,
+      hoverColor: ProjectColors.projectOrange,
       tooltip: 'YENİ ÜRÜN EKLE',
       label: Row(
         children: [

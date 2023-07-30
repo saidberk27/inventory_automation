@@ -1,6 +1,5 @@
 import 'package:envanter_kontrol/utils/colors.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
+import 'package:envanter_kontrol/viewmodel/login_vm.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/footer.dart';
@@ -21,90 +20,81 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
+      bottomSheet: const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: CustomFooter(),
       ),
-      bottomSheet: const CustomFooter(),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          const SizedBox(height: 75),
-          Expanded(flex: 2, child: Image.asset("images/cans.png")),
-          Expanded(
-            flex: 4,
-            child: Form(
-              key: _formKey,
-              child: Center(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width / 1.5,
-                  height: MediaQuery.of(context).size.height,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      customTextFormField(
-                          textEditingController: _emailController,
-                          isObscure: false,
-                          labelText: "E-Posta",
-                          hintText: "E-Postanızı Giriniz...",
-                          validator: _emailVaildator),
-                      const SizedBox(height: 24.0),
-                      customTextFormField(
-                          textEditingController: _passwordController,
-                          isObscure: true,
-                          labelText: "Parola",
-                          hintText: "Parolanızı Giriniz...",
-                          validator: _passwordValidator),
-                      const SizedBox(height: 24.0),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            final email = _emailController.text;
-                            final password = _passwordController.text;
-
-                            try {
-                              final credential = await FirebaseAuth.instance
-                                  .signInWithEmailAndPassword(
-                                email: email,
-                                password: password,
-                              );
-                              if (credential != null) {
-                                Navigator.of(context).push(PageRouteBuilder(
-                                  pageBuilder:
-                                      (context, animation, secondaryAnimation) {
-                                    return const HomePage(title: "Ana Sayfa");
-                                  },
-                                ));
-                              }
-                            } on FirebaseAuthException catch (e) {
-                              if (e.code == 'user-not-found') {
-                                ScaffoldMessenger.maybeOf(context)!
-                                    .showSnackBar(const SnackBar(
-                                        content: Text(
-                                            "Böyle Bir Kullanıcı Bulunmamaktadır")));
-                              } else if (e.code == 'wrong-password') {
-                                ScaffoldMessenger.maybeOf(context)!
-                                    .showSnackBar(const SnackBar(
-                                        content: Text("Hatalı Şifre")));
-                              }
-                            } catch (e) {
-                              if (kDebugMode) {
-                                print(e);
-                              }
-                            }
-                          }
-                        },
-                        child: const SizedBox(
-                            width: 75,
-                            height: 75,
-                            child: Center(child: Text('Giriş Yap'))),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 75),
+            Image.asset("images/cans.png", height: 200),
+            const SizedBox(height: 24),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        labelText: "E-Posta",
+                        hintText: "E-Postanızı Giriniz...",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
                       ),
-                    ],
-                  ),
+                      validator: _emailValidator,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: "Parola",
+                        hintText: "Parolanızı Giriniz...",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                      ),
+                      validator: _passwordValidator,
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: _submitFunction,
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 32),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+
+                        backgroundColor:
+                            ProjectColors.projectBlue2, // Buton rengi
+                      ),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width / 6,
+                        height: MediaQuery.of(context).size.height / 10,
+                        child: const Center(
+                          child: Text(
+                            'Giriş Yap',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white, // Buton metin rengi
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -118,6 +108,7 @@ class _LoginPageState extends State<LoginPage> {
     return TextFormField(
         controller: textEditingController,
         obscureText: isObscure,
+        onFieldSubmitted: _submitFunctionString,
         decoration: InputDecoration(
           labelText: labelText,
           hintText: hintText,
@@ -126,11 +117,11 @@ class _LoginPageState extends State<LoginPage> {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(18.0),
-            borderSide: BorderSide(color: ProjectColors.projectGrey1, width: 2),
+            borderSide: BorderSide(color: ProjectColors.projectBlue2, width: 2),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(18.0),
-            borderSide: BorderSide(color: ProjectColors.projectBrown, width: 2),
+            borderSide: BorderSide(color: ProjectColors.projectBlue2, width: 2),
           ),
         ),
         validator: validator);
@@ -145,12 +136,71 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
-  String? _emailVaildator(value) {
+  String? _emailValidator(value) {
     if (value == null || value.isEmpty) {
       return 'E- Posta Boş Olamaz';
     } else if (!value.contains('@')) {
       return 'Lütfen Geçerli Bir E-Posta Adresi Giriniz!';
     }
     return null;
+  }
+
+  void _submitFunctionString(String asd) {
+    debugPrint("Submitting... $asd");
+    _submitFunction();
+  }
+
+  void _submitFunction() async {
+    if (_formKey.currentState!.validate()) {
+      showDialog(
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("Giriş Yapılıyor..."),
+            content: Row(
+              children: const [
+                Expanded(flex: 1, child: SizedBox()),
+                CircularProgressIndicator(),
+                Expanded(flex: 1, child: SizedBox()),
+              ],
+            ),
+          );
+        },
+        context: context,
+      );
+      LoginViewModel login = LoginViewModel(
+          email: _emailController.text, password: _passwordController.text);
+
+      String signInToken = await login.signInWithEmailAndPassword();
+      if (signInToken == "succes") {
+        Navigator.of(context).push(PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) {
+            return const HomePage();
+          },
+        ));
+      } else {
+        showDialog(
+          builder: (context) {
+            return AlertDialog(
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.popUntil(context, (route) => route.isFirst);
+                    },
+                    child: Text("Tamam"))
+              ],
+              title: Text(signInToken),
+              content: Row(
+                children: const [
+                  Expanded(flex: 1, child: SizedBox()),
+                  Icon(Icons.cancel, color: Colors.red),
+                  Expanded(flex: 1, child: SizedBox()),
+                ],
+              ),
+            );
+          },
+          context: context,
+        );
+      }
+    }
   }
 }

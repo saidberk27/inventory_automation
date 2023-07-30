@@ -1,18 +1,13 @@
 import 'package:envanter_kontrol/local_functions/product_stats.dart';
-import 'package:envanter_kontrol/model/project_firestore.dart';
-import 'package:envanter_kontrol/utils/colors.dart';
 import 'package:envanter_kontrol/widgets/footer.dart';
 import 'package:envanter_kontrol/utils/text_styles.dart';
 import 'package:envanter_kontrol/viewmodel/product_vm.dart';
 import 'package:envanter_kontrol/widgets/custom_fab.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:pie_chart/pie_chart.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.title});
-
-  final String title;
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -24,9 +19,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomSheet: CustomFooter(),
-      appBar: AppBar(
-        title: Text(widget.title),
+      bottomSheet: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: const CustomFooter(),
       ),
       body: FutureBuilder(
         //OUTER FUTURE BUILDER FOR FETCH PRODUCTS
@@ -56,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                       child: productsListView(productList: productList),
                     ),
                     Expanded(flex: 3, child: pieChart(dataMap: dataMap)),
-                    Text(
+                    const Text(
                       "Said Berk © HGT AJANS 2023",
                       style: TextStyle(fontSize: 8),
                     )
@@ -65,7 +60,7 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           } else {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
         },
       ),
@@ -96,7 +91,8 @@ class _HomePageState extends State<HomePage> {
                 Text(
                   "Toplam Stok: $totalStocks",
                   style: ProjectTextStyle.redMedium,
-                )
+                ),
+                Icon(Icons.logout)
               ],
             )),
       ],
@@ -148,7 +144,7 @@ class _HomePageState extends State<HomePage> {
         builder: ((context) {
           return AlertDialog(
             title: Text(title),
-            contentPadding: EdgeInsets.all(20),
+            contentPadding: const EdgeInsets.all(20),
             content: SizedBox(
               height: MediaQuery.of(context).size.height / 4,
               child: Column(
@@ -180,9 +176,9 @@ class _HomePageState extends State<HomePage> {
               ),
               TextButton(
                 onPressed: () {
-                  TextEditingController _productTitleController =
+                  TextEditingController productTitleController =
                       TextEditingController();
-                  TextEditingController _productDescriptionController =
+                  TextEditingController productDescriptionController =
                       TextEditingController();
                   Navigator.of(context).pop(); // Diyalog penceresini kapatır
 
@@ -198,7 +194,7 @@ class _HomePageState extends State<HomePage> {
                               Expanded(
                                 flex: 3,
                                 child: TextFormField(
-                                  controller: _productTitleController,
+                                  controller: productTitleController,
                                   decoration: InputDecoration(
                                     hintText: "YENİ ÜRÜN ADI",
                                     border: OutlineInputBorder(
@@ -212,7 +208,7 @@ class _HomePageState extends State<HomePage> {
                               Expanded(
                                 flex: 3,
                                 child: TextFormField(
-                                  controller: _productDescriptionController,
+                                  controller: productDescriptionController,
                                   decoration: InputDecoration(
                                     hintText: "YENİ ÜRÜN AÇIKLAMASI",
                                     border: OutlineInputBorder(
@@ -233,7 +229,7 @@ class _HomePageState extends State<HomePage> {
                                 if (await productViewModel.deleteProduct(
                                     docID: productID)) {
                                   await Future.delayed(
-                                      Duration(milliseconds: 500));
+                                      const Duration(milliseconds: 500));
                                   setState(() {});
                                 }
 
@@ -246,11 +242,11 @@ class _HomePageState extends State<HomePage> {
                                     ProductViewModel();
                                 if (await productViewModel.updateProductInfo(
                                     docID: productID,
-                                    productTitle: _productTitleController.text,
+                                    productTitle: productTitleController.text,
                                     productDescrption:
-                                        _productDescriptionController.text)) {
+                                        productDescriptionController.text)) {
                                   await Future.delayed(
-                                      Duration(milliseconds: 500));
+                                      const Duration(milliseconds: 500));
                                   setState(() {});
                                 }
 
@@ -282,7 +278,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<dynamic> enterNewStockInfo(BuildContext context,
       {required String productID}) {
-    TextEditingController _stockController = TextEditingController();
+    TextEditingController stockController = TextEditingController();
     return showDialog(
       context: context,
       builder: (context) {
@@ -295,7 +291,7 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   width: 50,
                   child: TextFormField(
-                    controller: _stockController,
+                    controller: stockController,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -304,8 +300,8 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () async {
                       ProductViewModel productViewModel = ProductViewModel();
                       if (await productViewModel.updateStockInfo(
-                          docID: productID, newStock: _stockController.text)) {
-                        await Future.delayed(Duration(
+                          docID: productID, newStock: stockController.text)) {
+                        await Future.delayed(const Duration(
                             milliseconds: 500)); // state updates too early
                         setState(() {});
                       }

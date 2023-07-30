@@ -14,12 +14,12 @@ class ProjectColors {
     900: const Color.fromRGBO(41, 128, 185, 1),
   };
   static MaterialColor get customPrimarySwatch =>
-      MaterialColor(0XFF3B3936, color);
+      MaterialColor(0XFF36B1BF, color);
 
-  static Color projectRed = const Color(0XFFBD2A2E);
-  static Color projectBrown = const Color(0XFF3B3936);
-  static Color projectGrey1 = const Color(0XFFB2BEBF);
-  static Color projectGrey2 = const Color(0XFF889C9B);
-  static Color projectGrey3 = const Color(0XFF486966);
+  static Color projectRed = const Color(0XFFF2385A);
+  static Color projectOrange = const Color(0XFFF5A503);
+  static Color projectGrey = const Color(0XFFE9F1DF);
+  static Color projectBlue1 = const Color(0XFF4AD9D9);
+  static Color projectBlue2 = const Color(0XFF36B1BF);
   static Color projectWhite = const Color(0xFFFFFFFF);
 }
