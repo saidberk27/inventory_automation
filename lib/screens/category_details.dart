@@ -1,74 +1,98 @@
-import 'package:envanter_kontrol/local_functions/product_stats.dart';
-import 'package:envanter_kontrol/widgets/footer.dart';
-import 'package:envanter_kontrol/utils/text_styles.dart';
-import 'package:envanter_kontrol/viewmodel/product_vm.dart';
-import 'package:envanter_kontrol/widgets/custom_fab.dart';
+import 'package:envanter_kontrol/screens/add_new_product.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:pie_chart/pie_chart.dart';
 
-class HomePageProducts extends StatefulWidget {
-  const HomePageProducts({super.key});
+import '../local_functions/product_stats.dart';
+import '../utils/colors.dart';
+import '../utils/text_styles.dart';
+import '../viewmodel/product_vm.dart';
+import '../widgets/custom_fab.dart';
+import '../widgets/footer.dart';
+
+class CategoryPage extends StatefulWidget {
+  late final String categoryName;
+  late final String categoryID;
+
+  CategoryPage(
+      {super.key, required this.categoryName, required this.categoryID});
 
   @override
-  State<HomePageProducts> createState() => _HomePageProductsState();
+  State<CategoryPage> createState() => _CategoryPageState();
 }
 
-class _HomePageProductsState extends State<HomePageProducts> {
+class _CategoryPageState extends State<CategoryPage> {
   late Map<String, double> dataMap;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomSheet: const Padding(
-        padding: EdgeInsets.only(bottom: 8.0),
-        child: CustomFooter(),
-      ),
-      body: FutureBuilder(
-        //OUTER FUTURE BUILDER FOR FETCH PRODUCTS
-        future: ProductViewModel().getAllProducts(),
-        builder: (context, snapshotOUT) {
-          if (snapshotOUT.hasData) {
-            List<Map<String, dynamic>>? productList = snapshotOUT.data;
-            //INITIALIZING STATS AND TOTAL STOCK COUNT
-            int totalNumberOfStocks = ProductStats(productList: productList!)
-                .calculateTotalStockCount();
-            dataMap = ProductStats(productList: productList)
-                .createPieChartDataMap()
-                .cast<String, double>();
-            //----------------------------------------
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: headerSection(totalStocks: totalNumberOfStocks),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child: productsListView(productList: productList),
-                    ),
-                    Expanded(flex: 3, child: pieChart(dataMap: dataMap)),
-                    const Text(
-                      "Said Berk © HGT AJANS 2023",
-                      style: TextStyle(fontSize: 8),
-                    )
-                  ],
+        bottomSheet: Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: const CustomFooter(),
+        ),
+        appBar: AppBar(
+          title: Text(widget.categoryName),
+        ),
+        body: FutureBuilder(
+          future: ProductViewModel()
+              .getAllProductsOfCategory(categoryID: widget.categoryID),
+          builder: (context, snapshotOUT) {
+            if (snapshotOUT.hasData) {
+              List<Map<String, dynamic>>? productList = snapshotOUT.data;
+              //INITIALIZING STATS AND TOTAL STOCK COUNT
+              int totalNumberOfStocks = ProductStats(productList: productList!)
+                  .calculateTotalStockCount();
+              dataMap = ProductStats(productList: productList)
+                  .createPieChartDataMap()
+                  .cast<String, double>();
+              //----------------------------------------
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: headerSection(totalStocks: totalNumberOfStocks),
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: productsListView(productList: productList),
+                      ),
+                      Expanded(flex: 3, child: pieChart(dataMap: dataMap)),
+                      const Text(
+                        "Said Berk © HGT AJANS 2023",
+                        style: TextStyle(fontSize: 8),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            );
-          } else {
-            return const CircularProgressIndicator();
-          }
-        },
-      ),
-      floatingActionButton: CustomFab(
-        text: "Yeni Ürün Ekle",
-        route: "/addNewProduct",
-      ),
-    );
+              );
+            } else {
+              return const CircularProgressIndicator();
+            }
+          },
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      AddNewProductsPage(categoryID: widget.categoryID))),
+          focusColor: ProjectColors.projectBlue2,
+          backgroundColor: ProjectColors.projectBlue2,
+          hoverColor: ProjectColors.projectOrange,
+          tooltip: "Yeni Ürün Ekle",
+          label: Row(
+            children: [
+              Text("Yeni Ürün Ekle", style: ProjectTextStyle.whiteSmallStrong),
+              const Icon(Icons.add)
+            ],
+          ),
+        ));
   }
 
   PieChart pieChart({required Map<String, double> dataMap}) => PieChart(
@@ -93,7 +117,7 @@ class _HomePageProductsState extends State<HomePageProducts> {
                   "Toplam Stok: $totalStocks",
                   style: ProjectTextStyle.redMedium,
                 ),
-                const Icon(Icons.logout)
+                Icon(Icons.logout)
               ],
             )),
       ],

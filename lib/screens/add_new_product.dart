@@ -1,4 +1,5 @@
 import 'package:envanter_kontrol/model/product.dart';
+import 'package:envanter_kontrol/screens/home_categories.dart';
 import 'package:envanter_kontrol/screens/home_products.dart';
 import 'package:envanter_kontrol/utils/colors.dart';
 import 'package:envanter_kontrol/utils/text_styles.dart';
@@ -8,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:envanter_kontrol/viewmodel/product_vm.dart';
 
 class AddNewProductsPage extends StatefulWidget {
-  const AddNewProductsPage({super.key});
+  final String categoryID;
+  const AddNewProductsPage({super.key, required this.categoryID});
 
   @override
   State<AddNewProductsPage> createState() => _AddNewProductsPageState();
@@ -60,7 +62,7 @@ class _AddNewProductsPageState extends State<AddNewProductsPage> {
                             Navigator.of(context).push(PageRouteBuilder(
                               pageBuilder:
                                   (context, animation, secondaryAnimation) {
-                                return const HomePageProducts();
+                                return const HomePageCategories();
                               },
                             ));
                           }
@@ -145,8 +147,9 @@ class _AddNewProductsPageState extends State<AddNewProductsPage> {
           title: _productNameController.text,
           description: _productDescriptionController.text,
           stockCount: int.parse(_productStockInfoController.text),
-          mediaURL: productMediaURL);
-      vm.addNewProduct(product: product);
+          mediaURL: productMediaURL,
+          categoryID: widget.categoryID);
+      vm.addNewProduct(product: product, categoryID: widget.categoryID);
       return true;
     } catch (e) {
       if (kDebugMode) {

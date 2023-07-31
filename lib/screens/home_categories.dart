@@ -1,3 +1,5 @@
+import 'package:envanter_kontrol/screens/category_details.dart';
+import 'package:envanter_kontrol/utils/colors.dart';
 import 'package:envanter_kontrol/viewmodel/category_vm.dart';
 import 'package:envanter_kontrol/widgets/footer.dart';
 import 'package:envanter_kontrol/utils/text_styles.dart';
@@ -34,7 +36,7 @@ class _HomePageCategoriesState extends State<HomePageCategories> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
+                    const Expanded(
                       flex: 1,
                       child: Center(child: Text("Ana Sayfa")),
                     ),
@@ -51,7 +53,7 @@ class _HomePageCategoriesState extends State<HomePageCategories> {
           }
         },
       ),
-      floatingActionButton: const CustomFab(
+      floatingActionButton: CustomFab(
         text: "Yeni Kategori Ekle",
         route: "/addNewCategory",
       ),
@@ -62,16 +64,33 @@ class _HomePageCategoriesState extends State<HomePageCategories> {
     return ListView.builder(
       itemCount: categoriesList.length,
       itemBuilder: (context, index) {
-        return ListTile(
-          leading: Icon(Icons.category),
-          title: Text(categoriesList[index]["title"]),
-          subtitle: Text(categoriesList[index]["description"]),
-          trailing: const Icon(Icons.arrow_forward_ios),
-          onTap: () {
-            categoryDialog(
-              title: categoriesList[index]["title"],
-            );
-          },
+        return Column(
+          children: [
+            ListTile(
+              leading: Icon(
+                Icons.category,
+                color: ProjectColors.projectOrange,
+              ),
+              title: Text(
+                categoriesList[index]["title"],
+                style: ProjectTextStyle.redMediumStrong,
+              ),
+              subtitle: Text(
+                categoriesList[index]["description"],
+                style: ProjectTextStyle.grey3Small,
+              ),
+              trailing: const Icon(Icons.arrow_forward_ios),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CategoryPage(
+                            categoryName: categoriesList[index]["title"],
+                            categoryID: categoriesList[index]["id"])));
+              },
+            ),
+            const Divider(thickness: 1)
+          ],
         );
       },
     );

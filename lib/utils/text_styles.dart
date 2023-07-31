@@ -26,7 +26,7 @@ class ProjectTextStyle {
       color: ProjectColors.projectWhite,
       fontSize: 24,
       fontWeight: FontWeight.bold);
-//--------------------------------------BROWN
+//--------------------------------------orange
   static final TextStyle brownSmall =
       TextStyle(color: ProjectColors.projectOrange, fontSize: 16);
 
@@ -50,7 +50,7 @@ class ProjectTextStyle {
       color: ProjectColors.projectOrange,
       fontSize: 24,
       fontWeight: FontWeight.bold);
-  //--------------------------------------GREY1
+  //--------------------------------------GREY
   static final TextStyle grey1Small =
       TextStyle(color: ProjectColors.projectGrey, fontSize: 16);
 
@@ -74,7 +74,7 @@ class ProjectTextStyle {
       color: ProjectColors.projectGrey,
       fontSize: 24,
       fontWeight: FontWeight.bold);
-  //--------------------------------------GREY2
+  //--------------------------------------Blue1
 
   static final TextStyle grey2Small =
       TextStyle(color: ProjectColors.projectBlue1, fontSize: 16);
@@ -100,7 +100,7 @@ class ProjectTextStyle {
       fontSize: 24,
       fontWeight: FontWeight.bold);
 
-  //---------------------------------------GREY3
+  //---------------------------------------Blue2
   static final TextStyle grey3Small =
       TextStyle(color: ProjectColors.projectBlue2, fontSize: 16);
 

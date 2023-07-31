@@ -10,13 +10,14 @@ class ProductViewModel {
     return url;
   }
 
-  Future<void> addNewProduct({required Product product}) async {
+  Future<void> addNewProduct(
+      {required Product product, required String categoryID}) async {
     ProjectFirestore db = ProjectFirestore();
 
     Map<String, dynamic> document = product.toJson();
 
     db.addDocument(
-        collectionPath: "categories/Kategori 1/products",
+        collectionPath: "categories/$categoryID/products",
         document: document); //TODO Kategori Düzenle
   }
 
@@ -24,6 +25,17 @@ class ProductViewModel {
     ProjectFirestore db = ProjectFirestore();
     List<Map<String, dynamic>> productList = await db.readAllDocumentsWithOrder(
         collectionPath: "/products/",
+        orderField: "timestamp",
+        isDescending: true);
+
+    return productList;
+  }
+
+  Future<List<Map<String, dynamic>>> getAllProductsOfCategory(
+      {required String categoryID}) async {
+    ProjectFirestore db = ProjectFirestore();
+    List<Map<String, dynamic>> productList = await db.readAllDocumentsWithOrder(
+        collectionPath: "/categories/$categoryID/products",
         orderField: "timestamp",
         isDescending: true);
 
