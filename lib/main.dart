@@ -1,3 +1,4 @@
+import 'package:envanter_kontrol/screens/add_new_category.dart';
 import 'package:envanter_kontrol/screens/add_new_product.dart';
 import 'package:envanter_kontrol/screens/login.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: ProjectColors.customPrimarySwatch,
       ),
       home: const LoginPage(),
-      routes: {"/addNewProduct": (context) => const AddNewProductsPage()},
+      routes: {
+        "/addNewProduct": (context) => const AddNewProductsPage(),
+        "/addNewCategory": (context) => const AddNewCategoryPage()
+      },
     );
   }
 }

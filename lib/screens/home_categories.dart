@@ -53,7 +53,7 @@ class _HomePageCategoriesState extends State<HomePageCategories> {
       ),
       floatingActionButton: const CustomFab(
         text: "Yeni Kategori Ekle",
-        route: "/addNewProduct",
+        route: "/addNewCategory",
       ),
     );
   }
