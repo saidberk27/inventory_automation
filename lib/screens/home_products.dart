@@ -6,14 +6,14 @@ import 'package:envanter_kontrol/widgets/custom_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomePageProducts extends StatefulWidget {
+  const HomePageProducts({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePageProducts> createState() => _HomePageProductsState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageProductsState extends State<HomePageProducts> {
   late Map<String, double> dataMap;
 
   @override
@@ -65,6 +65,7 @@ class _HomePageState extends State<HomePage> {
         },
       ),
       floatingActionButton: const CustomFab(
+        text: "Yeni Ürün Ekle",
         route: "/addNewProduct",
       ),
     );

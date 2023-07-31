@@ -3,7 +3,7 @@ import 'package:envanter_kontrol/viewmodel/login_vm.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/footer.dart';
-import 'home.dart';
+import 'home_categories.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -176,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
       if (signInToken == "succes") {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) {
-            return const HomePage();
+            return const HomePageCategories();
           },
         ));
       } else {

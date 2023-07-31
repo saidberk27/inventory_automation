@@ -1,5 +1,5 @@
 import 'package:envanter_kontrol/model/product.dart';
-import 'package:envanter_kontrol/screens/home.dart';
+import 'package:envanter_kontrol/screens/home_products.dart';
 import 'package:envanter_kontrol/utils/colors.dart';
 import 'package:envanter_kontrol/utils/text_styles.dart';
 import 'package:file_picker/file_picker.dart';
@@ -60,7 +60,7 @@ class _AddNewProductsPageState extends State<AddNewProductsPage> {
                             Navigator.of(context).push(PageRouteBuilder(
                               pageBuilder:
                                   (context, animation, secondaryAnimation) {
-                                return const HomePage();
+                                return const HomePageProducts();
                               },
                             ));
                           }

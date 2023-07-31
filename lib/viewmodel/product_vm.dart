@@ -15,7 +15,9 @@ class ProductViewModel {
 
     Map<String, dynamic> document = product.toJson();
 
-    db.addDocument(collectionPath: "products/", document: document);
+    db.addDocument(
+        collectionPath: "categories/Kategori 1/products",
+        document: document); //TODO Kategori Düzenle
   }
 
   Future<List<Map<String, dynamic>>> getAllProducts() async {

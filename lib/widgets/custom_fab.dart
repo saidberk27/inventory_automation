@@ -5,7 +5,8 @@ import '../utils/text_styles.dart';
 
 class CustomFab extends StatelessWidget {
   final String route;
-  const CustomFab({super.key, required this.route});
+  final String text;
+  const CustomFab({super.key, required this.route, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -14,10 +15,10 @@ class CustomFab extends StatelessWidget {
       focusColor: ProjectColors.projectBlue2,
       backgroundColor: ProjectColors.projectBlue2,
       hoverColor: ProjectColors.projectOrange,
-      tooltip: 'YENİ ÜRÜN EKLE',
+      tooltip: text,
       label: Row(
         children: [
-          Text('YENİ ÜRÜN EKLE', style: ProjectTextStyle.whiteSmallStrong),
+          Text(text, style: ProjectTextStyle.whiteSmallStrong),
           const Icon(Icons.add)
         ],
       ),
