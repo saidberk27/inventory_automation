@@ -21,15 +21,15 @@ class ProductViewModel {
         document: document); //TODO Kategori Düzenle
   }
 
-  Future<List<Map<String, dynamic>>> getAllProducts() async {
+  /*Future<List<Map<String, dynamic>>> getAllProducts() async {
     ProjectFirestore db = ProjectFirestore();
     List<Map<String, dynamic>> productList = await db.readAllDocumentsWithOrder(
-        collectionPath: "/products/",
+        collectionPath: "/categories/$categoryID/products/",
         orderField: "timestamp",
         isDescending: true);
 
     return productList;
-  }
+  }*/
 
   Future<List<Map<String, dynamic>>> getAllProductsOfCategory(
       {required String categoryID}) async {
@@ -43,13 +43,15 @@ class ProductViewModel {
   }
 
   Future<bool> updateStockInfo(
-      {required String docID, required String newStock}) async {
+      {required String categoryID,
+      required String docID,
+      required String newStock}) async {
     try {
       //int InewStock = int.parse(newStock);
       ProjectFirestore db = ProjectFirestore();
       int newStockFinal = int.parse(newStock);
       db.updateDocument(
-          path: "products",
+          path: "categories/$categoryID/products",
           docID: docID,
           newData: {"stockCount": newStockFinal});
       return true;
@@ -58,10 +60,11 @@ class ProductViewModel {
     }
   }
 
-  Future<bool> deleteProduct({required String docID}) async {
+  Future<bool> deleteProduct(
+      {required String categoryID, required String docID}) async {
     try {
       ProjectFirestore db = ProjectFirestore();
-      db.deleteDocument(path: "products/", docID: docID);
+      db.deleteDocument(path: "categories/$categoryID/products/", docID: docID);
       return true;
     } catch (e) {
       return false;
@@ -69,7 +72,8 @@ class ProductViewModel {
   }
 
   Future<bool> updateProductInfo(
-      {required String docID,
+      {required String categoryID,
+      required String docID,
       required String productTitle,
       required String productDescrption}) async {
     try {
@@ -88,7 +92,9 @@ class ProductViewModel {
       ProjectFirestore db = ProjectFirestore();
 
       db.updateDocument(
-          path: "products", docID: docID, newData: newProductInfo);
+          path: "categories/$categoryID/products",
+          docID: docID,
+          newData: newProductInfo);
 
       return true;
     } catch (e) {

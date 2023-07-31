@@ -76,23 +76,27 @@ class _CategoryPageState extends State<CategoryPage> {
             }
           },
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      AddNewProductsPage(categoryID: widget.categoryID))),
-          focusColor: ProjectColors.projectBlue2,
-          backgroundColor: ProjectColors.projectBlue2,
-          hoverColor: ProjectColors.projectOrange,
-          tooltip: "Yeni Ürün Ekle",
-          label: Row(
-            children: [
-              Text("Yeni Ürün Ekle", style: ProjectTextStyle.whiteSmallStrong),
-              const Icon(Icons.add)
-            ],
-          ),
-        ));
+        floatingActionButton: customFAB(context));
+  }
+
+  FloatingActionButton customFAB(BuildContext context) {
+    return FloatingActionButton.extended(
+      onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  AddNewProductsPage(categoryID: widget.categoryID))),
+      focusColor: ProjectColors.projectBlue2,
+      backgroundColor: ProjectColors.projectBlue2,
+      hoverColor: ProjectColors.projectOrange,
+      tooltip: "Yeni Ürün Ekle",
+      label: Row(
+        children: [
+          Text("Yeni Ürün Ekle", style: ProjectTextStyle.whiteSmallStrong),
+          const Icon(Icons.add)
+        ],
+      ),
+    );
   }
 
   PieChart pieChart({required Map<String, double> dataMap}) => PieChart(
@@ -252,6 +256,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                 ProductViewModel productViewModel =
                                     ProductViewModel();
                                 if (await productViewModel.deleteProduct(
+                                    categoryID: widget.categoryID,
                                     docID: productID)) {
                                   await Future.delayed(
                                       const Duration(milliseconds: 500));
@@ -266,6 +271,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                 ProductViewModel productViewModel =
                                     ProductViewModel();
                                 if (await productViewModel.updateProductInfo(
+                                    categoryID: widget.categoryID,
                                     docID: productID,
                                     productTitle: productTitleController.text,
                                     productDescrption:
@@ -325,7 +331,9 @@ class _CategoryPageState extends State<CategoryPage> {
                     onPressed: () async {
                       ProductViewModel productViewModel = ProductViewModel();
                       if (await productViewModel.updateStockInfo(
-                          docID: productID, newStock: stockController.text)) {
+                          categoryID: widget.categoryID,
+                          docID: productID,
+                          newStock: stockController.text)) {
                         await Future.delayed(const Duration(
                             milliseconds: 500)); // state updates too early
                         setState(() {});

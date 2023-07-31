@@ -1,6 +1,6 @@
 import 'package:envanter_kontrol/model/category.dart';
 import 'package:envanter_kontrol/screens/home_categories.dart';
-import 'package:envanter_kontrol/screens/home_products.dart';
+
 import 'package:envanter_kontrol/utils/colors.dart';
 import 'package:envanter_kontrol/utils/text_styles.dart';
 import 'package:envanter_kontrol/viewmodel/category_vm.dart';

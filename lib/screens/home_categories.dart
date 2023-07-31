@@ -3,7 +3,6 @@ import 'package:envanter_kontrol/utils/colors.dart';
 import 'package:envanter_kontrol/viewmodel/category_vm.dart';
 import 'package:envanter_kontrol/widgets/footer.dart';
 import 'package:envanter_kontrol/utils/text_styles.dart';
-import 'package:envanter_kontrol/viewmodel/product_vm.dart';
 import 'package:envanter_kontrol/widgets/custom_fab.dart';
 import 'package:flutter/material.dart';
 
@@ -199,53 +198,5 @@ class _HomePageCategoriesState extends State<HomePageCategories> {
             ],
           );
         }));
-  }
-
-  Future<dynamic> enterNewStockInfo(BuildContext context,
-      {required String productID}) {
-    TextEditingController stockController = TextEditingController();
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Yeni Stok Bilgisi Gir"),
-          content: SizedBox(
-            height: 100,
-            child: Column(
-              children: [
-                SizedBox(
-                  width: 50,
-                  child: TextFormField(
-                    controller: stockController,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                TextButton(
-                    onPressed: () async {
-                      ProductViewModel productViewModel = ProductViewModel();
-                      if (await productViewModel.updateStockInfo(
-                          docID: productID, newStock: stockController.text)) {
-                        await Future.delayed(const Duration(
-                            milliseconds: 500)); // state updates too early
-                        setState(() {});
-                      }
-
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text("Stok Bilgisini Güncelle"))
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("İptal Et"))
-          ],
-        );
-      },
-    );
   }
 }
