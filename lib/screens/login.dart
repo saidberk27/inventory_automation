@@ -48,6 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       validator: _emailValidator,
+                      onFieldSubmitted: _submitFunctionString,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
@@ -61,6 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       validator: _passwordValidator,
+                      onFieldSubmitted: _submitFunctionString,
                     ),
                     const SizedBox(height: 24),
                     ElevatedButton(
@@ -178,6 +180,7 @@ class _LoginPageState extends State<LoginPage> {
           },
         ));
       } else {
+        Navigator.pop(context); // Closes previous loading dialog first.
         showDialog(
           builder: (context) {
             return AlertDialog(
@@ -186,7 +189,7 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       Navigator.popUntil(context, (route) => route.isFirst);
                     },
-                    child: Text("Tamam"))
+                    child: const Text("Tamam"))
               ],
               title: Text(signInToken),
               content: Row(

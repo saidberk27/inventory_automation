@@ -44,40 +44,40 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAvurWB1vcJhC9YVwlKva-KJ1hql6nbE9U',
-    appId: '1:44107571506:web:44bff548c64d0ff6b2772b',
-    messagingSenderId: '44107571506',
-    projectId: 'cansgomlek',
-    authDomain: 'cansgomlek.firebaseapp.com',
-    storageBucket: 'cansgomlek.appspot.com',
-    measurementId: 'G-K4N3MQWC3B',
+    apiKey: 'AIzaSyBxjhT37K7RsbaStjIaHoSwIK2VC8bidJ0',
+    appId: '1:891775838989:web:1b2461c437161fde291e44',
+    messagingSenderId: '891775838989',
+    projectId: 'caglasurmelihome',
+    authDomain: 'caglasurmelihome.firebaseapp.com',
+    storageBucket: 'caglasurmelihome.appspot.com',
+    measurementId: 'G-7FSBE6DC0Z',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDFbS_-nKYU4z9QIfqUhzqzeylrfPyK1Ck',
-    appId: '1:44107571506:android:1f84b6df934249f0b2772b',
-    messagingSenderId: '44107571506',
-    projectId: 'cansgomlek',
-    storageBucket: 'cansgomlek.appspot.com',
+    apiKey: 'AIzaSyBXe5hrEj1kqwL_1cd1FRs6wiDyNHZOJ7A',
+    appId: '1:891775838989:android:e973e3b4c63aa44e291e44',
+    messagingSenderId: '891775838989',
+    projectId: 'caglasurmelihome',
+    storageBucket: 'caglasurmelihome.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCt8BTEm-UMJ4FDPFzBnPELC-ao3uVgM5A',
-    appId: '1:44107571506:ios:0422d69c6204a149b2772b',
-    messagingSenderId: '44107571506',
-    projectId: 'cansgomlek',
-    storageBucket: 'cansgomlek.appspot.com',
-    iosClientId: '44107571506-rsgr5caop3kcq6vt3had1c7014l8j0nr.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCGvI35gyVdJTOiCRgGly3rXpl4j-dz8Hs',
+    appId: '1:891775838989:ios:e015618ab063c597291e44',
+    messagingSenderId: '891775838989',
+    projectId: 'caglasurmelihome',
+    storageBucket: 'caglasurmelihome.appspot.com',
+    iosClientId: '891775838989-v501oi7brs5fdohtou0j28mc94d6bn9s.apps.googleusercontent.com',
     iosBundleId: 'com.example.envanterKontrol',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCt8BTEm-UMJ4FDPFzBnPELC-ao3uVgM5A',
-    appId: '1:44107571506:ios:0422d69c6204a149b2772b',
-    messagingSenderId: '44107571506',
-    projectId: 'cansgomlek',
-    storageBucket: 'cansgomlek.appspot.com',
-    iosClientId: '44107571506-rsgr5caop3kcq6vt3had1c7014l8j0nr.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCGvI35gyVdJTOiCRgGly3rXpl4j-dz8Hs',
+    appId: '1:891775838989:ios:e015618ab063c597291e44',
+    messagingSenderId: '891775838989',
+    projectId: 'caglasurmelihome',
+    storageBucket: 'caglasurmelihome.appspot.com',
+    iosClientId: '891775838989-v501oi7brs5fdohtou0j28mc94d6bn9s.apps.googleusercontent.com',
     iosBundleId: 'com.example.envanterKontrol',
   );
 }

@@ -6,13 +6,12 @@ import 'package:file_picker/file_picker.dart';
 class ProductViewModel {
   Future<String> getMediaURL({required FilePickerResult result}) async {
     ProjectStorage storage = ProjectStorage();
-    String URL = await storage.uploadMedia(result);
-    return URL;
+    String url = await storage.uploadMedia(result);
+    return url;
   }
 
   Future<void> addNewProduct({required Product product}) async {
     ProjectFirestore db = ProjectFirestore();
-    ProjectStorage storage = ProjectStorage();
 
     Map<String, dynamic> document = product.toJson();
 
