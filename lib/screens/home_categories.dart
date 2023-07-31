@@ -23,7 +23,7 @@ class _HomePageCategoriesState extends State<HomePageCategories> {
       ),
       body: FutureBuilder(
         //OUTER FUTURE BUILDER FOR FETCH CATEGORIES
-        future: CategoryVieModel().getAllCategories(),
+        future: CategoryViewModel().getAllCategories(),
         builder: (context, snapshotOUT) {
           if (snapshotOUT.hasData) {
             List<Map<String, dynamic>>? categoryList = snapshotOUT.data;

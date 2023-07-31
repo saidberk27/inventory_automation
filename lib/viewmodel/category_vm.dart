@@ -2,7 +2,7 @@ import 'package:envanter_kontrol/model/category.dart';
 
 import '../model/project_firestore.dart';
 
-class CategoryVieModel {
+class CategoryViewModel {
   Future<void> addNewCategory({required ProductCategory category}) async {
     ProjectFirestore db = ProjectFirestore();
 
@@ -20,5 +20,16 @@ class CategoryVieModel {
             isDescending: true);
     print("Kategori Listesi $categoryList");
     return categoryList;
+  }
+
+  Future<bool> deleteCategory({required String categoryID}) async {
+    try {
+      ProjectFirestore db = ProjectFirestore();
+      db.deleteDocument(path: "categories/", docID: categoryID);
+      return true;
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
   }
 }

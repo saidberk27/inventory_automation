@@ -1,14 +1,13 @@
 import 'package:envanter_kontrol/screens/add_new_product.dart';
+import 'package:envanter_kontrol/screens/home_categories.dart';
+import 'package:envanter_kontrol/viewmodel/category_vm.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:pie_chart/pie_chart.dart';
 
 import '../local_functions/product_stats.dart';
 import '../utils/colors.dart';
 import '../utils/text_styles.dart';
 import '../viewmodel/product_vm.dart';
-import '../widgets/custom_fab.dart';
 import '../widgets/footer.dart';
 
 class CategoryPage extends StatefulWidget {
@@ -55,7 +54,7 @@ class _CategoryPageState extends State<CategoryPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
-                        flex: 1,
+                        flex: 2,
                         child: headerSection(totalStocks: totalNumberOfStocks),
                       ),
                       Expanded(
@@ -113,15 +112,127 @@ class _CategoryPageState extends State<CategoryPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "KATEGORİ ADI",
+                  widget.categoryName,
                   style: ProjectTextStyle.redMediumStrong,
                   textAlign: TextAlign.center,
                 ),
+                SizedBox(height: 10),
                 Text(
                   "Toplam Stok: $totalStocks",
                   style: ProjectTextStyle.redMedium,
                 ),
-                Icon(Icons.logout)
+                SizedBox(height: 10),
+                TextButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text("Kategoriyi Düzenle"),
+                          content: SizedBox(
+                            height: 100,
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      hintText: "YENİ KATEGORİ ADI",
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(24)),
+                                      prefixIcon: const Icon(Icons.abc),
+                                    ),
+                                  ),
+                                ),
+                                const Expanded(flex: 1, child: SizedBox()),
+                                Expanded(
+                                  flex: 3,
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      hintText: "YENİ KATEGORİ AÇIKLAMASI",
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(24)),
+                                      prefixIcon: const Icon(Icons.abc),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                                onPressed: () async {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: Text(
+                                          "DİKKAT",
+                                          style: ProjectTextStyle.redMedium,
+                                        ),
+                                        content: Text(
+                                          "Bu işlem geri alınamaz. Devam etmek istiyor musunuz?",
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () async {
+                                                ProductViewModel
+                                                    productViewModel =
+                                                    ProductViewModel();
+                                                if (await CategoryViewModel()
+                                                    .deleteCategory(
+                                                        categoryID: widget
+                                                            .categoryID)) {
+                                                  await Future.delayed(
+                                                      const Duration(
+                                                          milliseconds: 500));
+                                                  setState(() {});
+                                                }
+
+                                                Navigator.of(context).pop();
+                                                Navigator.push(context,
+                                                    MaterialPageRoute(
+                                                  builder: (context) {
+                                                    return HomePageCategories();
+                                                  },
+                                                ));
+                                              },
+                                              child: Text("Evet")),
+                                          TextButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                              child: Text("Hayır"))
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                                child: const Text("Kategoriyi Sil")),
+                            TextButton(
+                                onPressed: () async {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("Kategoriyi Güncelle")),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("İptal Et"))
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  style: ButtonStyle(
+                    side: MaterialStateProperty.all(
+                        BorderSide(color: ProjectColors.projectRed, width: 2)),
+                    foregroundColor: MaterialStateProperty.all(Colors.red),
+                  ),
+                  child: Text("Kategoriyi Düzenle",
+                      style: ProjectTextStyle.redSmallStrong),
+                )
               ],
             )),
       ],

@@ -128,7 +128,7 @@ class _AddNewCategoryPageState extends State<AddNewCategoryPage> {
 
   Future<bool> _addNewCategory() async {
     try {
-      CategoryVieModel vm = CategoryVieModel();
+      CategoryViewModel vm = CategoryViewModel();
 
       ProductCategory category = ProductCategory(
           title: _categoryNameController.text,

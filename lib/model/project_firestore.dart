@@ -91,4 +91,22 @@ class ProjectFirestore {
     );
     return documentMaps;
   }
+
+  Future<void> deleteCollection(String collectionPath) async {
+    CollectionReference collectionRef =
+        FirebaseFirestore.instance.collection(collectionPath);
+
+    // Get all documents in the collection
+    QuerySnapshot querySnapshot = await collectionRef.get();
+
+    // Delete each document in the collection
+    for (DocumentSnapshot docSnapshot in querySnapshot.docs) {
+      await docSnapshot.reference.delete();
+    }
+
+    // Delete the collection itself
+    await collectionRef
+        .doc()
+        .delete(); // Since there are no documents left, this will delete the collection
+  }
 }
