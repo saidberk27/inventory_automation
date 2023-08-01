@@ -15,7 +15,7 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  final String _appTitle = 'Can\'s Gömlek Envanter Takip Yazılımı';
+  final String _appTitle = 'Çağla Sürmeli Home Envanter Takip Yazılımı';
 
   @override
   Widget build(BuildContext context) {

@@ -27,7 +27,9 @@ class _AddNewCategoryPageState extends State<AddNewCategoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Yeni Kategori Ekle"),
+        foregroundColor: ProjectColors.projectWhite,
+        title: Text("Yeni Kategori Ekle",
+            style: ProjectTextStyle.whiteSmallStrong),
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -59,7 +61,10 @@ class _AddNewCategoryPageState extends State<AddNewCategoryPage> {
                             ));
                           }
                         },
-                        child: const Text("Yeni Kategori Ekle")))
+                        child: Text(
+                          "Yeni Kategori Ekle",
+                          style: ProjectTextStyle.whiteSmallStrong,
+                        )))
               ],
             ),
           ),

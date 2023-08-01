@@ -1,5 +1,5 @@
 import 'package:envanter_kontrol/model/category.dart';
-
+import 'package:flutter/material.dart';
 import '../model/project_firestore.dart';
 
 class CategoryViewModel {
@@ -18,7 +18,7 @@ class CategoryViewModel {
             collectionPath: "/categories/",
             orderField: "timestamp",
             isDescending: true);
-    print("Kategori Listesi $categoryList");
+    debugPrint("Kategori Listesi $categoryList");
     return categoryList;
   }
 
@@ -28,7 +28,7 @@ class CategoryViewModel {
       db.deleteDocument(path: "categories/", docID: categoryID);
       return true;
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
       return false;
     }
   }

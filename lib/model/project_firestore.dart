@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class ProjectFirestore {
-  var db;
+  late FirebaseFirestore db;
 
   ProjectFirestore() {
     db = FirebaseFirestore.instance;
@@ -12,7 +13,7 @@ class ProjectFirestore {
       required Map<String, dynamic> document}) async {
     document.addAll({"timestamp": Timestamp.fromDate(DateTime.now())});
     db.collection(collectionPath).add(document).then((documentSnapshot) =>
-        print("Added Data with ID: ${documentSnapshot.id}"));
+        debugPrint("Added Data with ID: ${documentSnapshot.id}"));
   }
 
   Future<void> updateDocument(
@@ -23,15 +24,15 @@ class ProjectFirestore {
         FirebaseFirestore.instance.collection(path).doc(docID);
     docRef
         .update(newData)
-        .then((value) => print('Document updated'))
-        .catchError((error) => print('Failed to update document: $error'));
+        .then((value) => debugPrint('Document updated'))
+        .catchError((error) => debugPrint('Failed to update document: $error'));
   }
 
   Future<void> deleteDocument(
       {required String path, required String docID}) async {
     db.collection(path).doc(docID).delete().then(
-          (doc) => print("Document deleted"),
-          onError: (e) => print("Error updating document $e"),
+          (doc) => debugPrint("Document deleted"),
+          onError: (e) => debugPrint("Error updating document $e"),
         );
   }
 
@@ -43,7 +44,7 @@ class ProjectFirestore {
       (DocumentSnapshot doc) {
         data = doc.data() as Map<String, dynamic>;
       },
-      onError: (e) => print("Error getting document: $e"),
+      onError: (e) => debugPrint("Error getting document: $e"),
     );
     return data;
   }
@@ -53,16 +54,15 @@ class ProjectFirestore {
     List<Map<String, dynamic>> documentMaps = [];
     await db.collection(collectionPath).get().then(
       (querySnapshot) {
-        print("Successfully completed");
+        debugPrint("Successfully completed");
         for (var docSnapshot in querySnapshot.docs) {
-          Map<String, dynamic> documentMap =
-              docSnapshot.data() as Map<String, dynamic>;
+          Map<String, dynamic> documentMap = docSnapshot.data();
           documentMap.addAll({"id": docSnapshot.id});
           documentMaps.add(documentMap);
           //print('${docSnapshot.id} => ${docSnapshot.data()}');
         }
       },
-      onError: (e) => print("Error completing: $e"),
+      onError: (e) => debugPrint("Error completing: $e"),
     );
     return documentMaps;
   }
@@ -78,16 +78,14 @@ class ProjectFirestore {
         .get()
         .then(
       (querySnapshot) {
-        print("Successfully completed");
         for (var docSnapshot in querySnapshot.docs) {
-          Map<String, dynamic> documentMap =
-              docSnapshot.data() as Map<String, dynamic>;
+          Map<String, dynamic> documentMap = docSnapshot.data();
           documentMap.addAll({"id": docSnapshot.id});
           documentMaps.add(documentMap);
           //print('${docSnapshot.id} => ${docSnapshot.data()}');
         }
       },
-      onError: (e) => print("Error completing: $e"),
+      onError: (e) => debugPrint("Error completing: $e"),
     );
     return documentMaps;
   }

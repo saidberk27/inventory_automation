@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 75),
-            Image.asset("images/cans.png", height: 200),
+            Image.asset("images/main_logo.png", height: 200),
             const SizedBox(height: 24),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),

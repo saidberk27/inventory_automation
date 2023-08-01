@@ -30,7 +30,11 @@ class _AddNewProductsPageState extends State<AddNewProductsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Yeni Ürün Ekle"),
+        foregroundColor: ProjectColors.projectWhite,
+        title: Text(
+          "Yeni Ürün Ekle",
+          style: ProjectTextStyle.whiteSmallStrong,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -67,7 +71,10 @@ class _AddNewProductsPageState extends State<AddNewProductsPage> {
                             ));
                           }
                         },
-                        child: const Text("Yeni Ürün Ekle")))
+                        child: Text(
+                          "Yeni Ürün Ekle",
+                          style: ProjectTextStyle.whiteSmallStrong,
+                        )))
               ],
             ),
           ),
@@ -101,7 +108,7 @@ class _AddNewProductsPageState extends State<AddNewProductsPage> {
               width: 2.0,
             ),
           ),
-          child: Text('Dosya Seç', style: ProjectTextStyle.redSmallStrong),
+          child: Text('Görsel Ekle', style: ProjectTextStyle.redSmallStrong),
         ),
         const SizedBox(width: 10),
         Text(

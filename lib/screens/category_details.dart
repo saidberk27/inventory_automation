@@ -31,12 +31,16 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomSheet: Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
-          child: const CustomFooter(),
+        bottomSheet: const Padding(
+          padding: EdgeInsets.only(bottom: 8.0),
+          child: CustomFooter(),
         ),
         appBar: AppBar(
-          title: Text(widget.categoryName),
+          foregroundColor: ProjectColors.projectWhite,
+          title: Text(
+            widget.categoryName,
+            style: ProjectTextStyle.whiteSmallStrong,
+          ),
         ),
         body: FutureBuilder(
           future: ProductViewModel()
@@ -120,12 +124,12 @@ class _CategoryPageState extends State<CategoryPage> {
                   style: ProjectTextStyle.redMediumStrong,
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   "Toplam Stok: $totalStocks",
                   style: ProjectTextStyle.redMedium,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 TextButton(
                   onPressed: () {
                     showDialog(
@@ -184,7 +188,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                           _categoryDescUpdateController.text);
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) =>
-                                          HomePageCategories()));
+                                          const HomePageCategories()));
                                 },
                                 child: const Text("Kategoriyi Güncelle")),
                             TextButton(
@@ -220,13 +224,12 @@ class _CategoryPageState extends State<CategoryPage> {
             "DİKKAT",
             style: ProjectTextStyle.redMedium,
           ),
-          content: Text(
+          content: const Text(
             "Bu işlem geri alınamaz. Devam etmek istiyor musunuz?",
           ),
           actions: [
             TextButton(
                 onPressed: () async {
-                  ProductViewModel productViewModel = ProductViewModel();
                   if (await CategoryViewModel()
                       .deleteCategory(categoryID: widget.categoryID)) {
                     await Future.delayed(const Duration(milliseconds: 500));
@@ -236,13 +239,14 @@ class _CategoryPageState extends State<CategoryPage> {
                   Navigator.of(context).pop();
                   Navigator.push(context, MaterialPageRoute(
                     builder: (context) {
-                      return HomePageCategories();
+                      return const HomePageCategories();
                     },
                   ));
                 },
-                child: Text("Evet")),
+                child: const Text("Evet")),
             TextButton(
-                onPressed: () => Navigator.pop(context), child: Text("Hayır"))
+                onPressed: () => Navigator.pop(context),
+                child: const Text("Hayır"))
           ],
         );
       },
@@ -271,8 +275,8 @@ class _CategoryPageState extends State<CategoryPage> {
     );
   }
 
-  Container leadingImgCustom(List<dynamic> productList, int index) {
-    return Container(
+  SizedBox leadingImgCustom(List<dynamic> productList, int index) {
+    return SizedBox(
         width: 75,
         height: 100,
         child: productList[index]["mediaURL"] != ""
@@ -303,15 +307,31 @@ class _CategoryPageState extends State<CategoryPage> {
                 children: [
                   Text('Stok: ${stock.toString()}'),
                   Text(descrption),
-                  SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: mediaURL != ""
-                        ? Image.network(
-                            mediaURL,
-                            fit: BoxFit.fill,
-                          )
-                        : Image.asset("assets/images/shirt.png"),
+                  InkWell(
+                    onTap: () {
+                      debugPrint("Tıklandı");
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            content: Image.network(mediaURL),
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 2, color: ProjectColors.projectRed)),
+                      height: 100,
+                      width: 100,
+                      child: mediaURL != ""
+                          ? Image.network(
+                              mediaURL,
+                              fit: BoxFit.fill,
+                            )
+                          : Image.asset("assets/images/shirt.png"),
+                    ),
                   ),
                 ],
               ),

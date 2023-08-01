@@ -35,9 +35,13 @@ class _HomePageCategoriesState extends State<HomePageCategories> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Expanded(
+                    Expanded(
                       flex: 1,
-                      child: Center(child: Text("Ana Sayfa")),
+                      child: Center(
+                          child: Text(
+                        "Envanter Takip Yazılımı",
+                        style: ProjectTextStyle.redMediumStrong,
+                      )),
                     ),
                     Expanded(
                       flex: 4,
@@ -52,7 +56,7 @@ class _HomePageCategoriesState extends State<HomePageCategories> {
           }
         },
       ),
-      floatingActionButton: CustomFab(
+      floatingActionButton: const CustomFab(
         text: "Yeni Kategori Ekle",
         route: "/addNewCategory",
       ),

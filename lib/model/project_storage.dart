@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -18,7 +16,7 @@ class ProjectStorage {
       await fileRef.putData(uploadfile!);
       return fileRef.getDownloadURL();
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       return e.toString();
     }
   }

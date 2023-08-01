@@ -27,7 +27,7 @@ class ProductStats {
 
   Map<String, int> createPieChartDataMap() {
     Map<String, int> pieChartMap = {};
-    if (productList.length <= 0) {
+    if (productList.isEmpty) {
       return {"Kaydedilmiş Ürün Bulunamadı": 0};
     }
     for (var product in productList) {
