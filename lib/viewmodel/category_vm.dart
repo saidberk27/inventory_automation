@@ -32,4 +32,29 @@ class CategoryViewModel {
       return false;
     }
   }
+
+  Future<bool> updateCategoryInfo(
+      {required String categoryID,
+      required String categoryTitle,
+      required String categoryDesc}) async {
+    try {
+      Map<String, dynamic> newCategoryInfo = {};
+
+      if (categoryTitle == "" && categoryDesc != "") {
+        newCategoryInfo = {"description": categoryDesc};
+      } else if (categoryTitle != "" && categoryDesc == "") {
+        newCategoryInfo = {"title": categoryTitle};
+      } else {
+        newCategoryInfo = {"title": categoryTitle, "description": categoryDesc};
+      }
+      ProjectFirestore db = ProjectFirestore();
+
+      db.updateDocument(
+          path: "categories/", docID: categoryID, newData: newCategoryInfo);
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

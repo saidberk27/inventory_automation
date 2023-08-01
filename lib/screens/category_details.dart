@@ -23,7 +23,11 @@ class CategoryPage extends StatefulWidget {
 
 class _CategoryPageState extends State<CategoryPage> {
   late Map<String, double> dataMap;
+  final TextEditingController _categoryNameUpdateController =
+      TextEditingController();
 
+  final TextEditingController _categoryDescUpdateController =
+      TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,6 +140,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                 Expanded(
                                   flex: 3,
                                   child: TextFormField(
+                                    controller: _categoryNameUpdateController,
                                     decoration: InputDecoration(
                                       hintText: "YENİ KATEGORİ ADI",
                                       border: OutlineInputBorder(
@@ -149,6 +154,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                 Expanded(
                                   flex: 3,
                                   child: TextFormField(
+                                    controller: _categoryDescUpdateController,
                                     decoration: InputDecoration(
                                       hintText: "YENİ KATEGORİ AÇIKLAMASI",
                                       border: OutlineInputBorder(
@@ -164,55 +170,21 @@ class _CategoryPageState extends State<CategoryPage> {
                           actions: [
                             TextButton(
                                 onPressed: () async {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: Text(
-                                          "DİKKAT",
-                                          style: ProjectTextStyle.redMedium,
-                                        ),
-                                        content: Text(
-                                          "Bu işlem geri alınamaz. Devam etmek istiyor musunuz?",
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                              onPressed: () async {
-                                                ProductViewModel
-                                                    productViewModel =
-                                                    ProductViewModel();
-                                                if (await CategoryViewModel()
-                                                    .deleteCategory(
-                                                        categoryID: widget
-                                                            .categoryID)) {
-                                                  await Future.delayed(
-                                                      const Duration(
-                                                          milliseconds: 500));
-                                                  setState(() {});
-                                                }
-
-                                                Navigator.of(context).pop();
-                                                Navigator.push(context,
-                                                    MaterialPageRoute(
-                                                  builder: (context) {
-                                                    return HomePageCategories();
-                                                  },
-                                                ));
-                                              },
-                                              child: Text("Evet")),
-                                          TextButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                              child: Text("Hayır"))
-                                        ],
-                                      );
-                                    },
-                                  );
+                                  warningDialog(context);
                                 },
                                 child: const Text("Kategoriyi Sil")),
                             TextButton(
                                 onPressed: () async {
-                                  Navigator.of(context).pop();
+                                  CategoryViewModel vm = CategoryViewModel();
+                                  vm.updateCategoryInfo(
+                                      categoryID: widget.categoryID,
+                                      categoryTitle:
+                                          _categoryNameUpdateController.text,
+                                      categoryDesc:
+                                          _categoryDescUpdateController.text);
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          HomePageCategories()));
                                 },
                                 child: const Text("Kategoriyi Güncelle")),
                             TextButton(
@@ -236,6 +208,44 @@ class _CategoryPageState extends State<CategoryPage> {
               ],
             )),
       ],
+    );
+  }
+
+  Future<dynamic> warningDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            "DİKKAT",
+            style: ProjectTextStyle.redMedium,
+          ),
+          content: Text(
+            "Bu işlem geri alınamaz. Devam etmek istiyor musunuz?",
+          ),
+          actions: [
+            TextButton(
+                onPressed: () async {
+                  ProductViewModel productViewModel = ProductViewModel();
+                  if (await CategoryViewModel()
+                      .deleteCategory(categoryID: widget.categoryID)) {
+                    await Future.delayed(const Duration(milliseconds: 500));
+                    setState(() {});
+                  }
+
+                  Navigator.of(context).pop();
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return HomePageCategories();
+                    },
+                  ));
+                },
+                child: Text("Evet")),
+            TextButton(
+                onPressed: () => Navigator.pop(context), child: Text("Hayır"))
+          ],
+        );
+      },
     );
   }
 
