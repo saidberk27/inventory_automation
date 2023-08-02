@@ -17,7 +17,7 @@ class _HomePageCategoriesState extends State<HomePageCategories> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomSheet: const Padding(
+      bottomNavigationBar: const Padding(
         padding: EdgeInsets.only(bottom: 8.0),
         child: CustomFooter(),
       ),
@@ -36,11 +36,17 @@ class _HomePageCategoriesState extends State<HomePageCategories> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                      flex: 1,
+                      flex: 3,
                       child: Center(
-                          child: Text(
-                        "Envanter Takip Yazılımı",
-                        style: ProjectTextStyle.redMediumStrong,
+                          child: Column(
+                        children: [
+                          Image.asset("images/main_logo.png", height: 200),
+                          SizedBox(height: 20),
+                          Text(
+                            "Envanter Takip Yazılımı",
+                            style: ProjectTextStyle.redMediumStrong,
+                          ),
+                        ],
                       )),
                     ),
                     Expanded(

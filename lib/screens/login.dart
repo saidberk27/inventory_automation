@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomSheet: const Padding(
+      bottomNavigationBar: const Padding(
         padding: EdgeInsets.all(16.0),
         child: CustomFooter(),
       ),
@@ -29,7 +29,9 @@ class _LoginPageState extends State<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 75),
-            Image.asset("images/main_logo.png", height: 200),
+            SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: Image.asset("images/main_logo.png", height: 200)),
             const SizedBox(height: 24),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -77,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                             ProjectColors.projectBlue2, // Buton rengi
                       ),
                       child: SizedBox(
-                        width: MediaQuery.of(context).size.width / 6,
+                        width: MediaQuery.of(context).size.width / 4,
                         height: MediaQuery.of(context).size.height / 10,
                         child: const Center(
                           child: Text(
