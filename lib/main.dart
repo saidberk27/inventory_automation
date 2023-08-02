@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
       routes: {
         "/addNewProduct": (context) => const AddNewProductsPage(
               categoryID: "demo ID",
+              categoryName: 'demo Name',
             ),
         "/addNewCategory": (context) => const AddNewCategoryPage()
       },

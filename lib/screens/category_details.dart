@@ -31,7 +31,7 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomSheet: const Padding(
+        bottomNavigationBar: const Padding(
           padding: EdgeInsets.only(bottom: 8.0),
           child: CustomFooter(),
         ),
@@ -91,8 +91,9 @@ class _CategoryPageState extends State<CategoryPage> {
       onPressed: () => Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  AddNewProductsPage(categoryID: widget.categoryID))),
+              builder: (context) => AddNewProductsPage(
+                  categoryName: widget.categoryName,
+                  categoryID: widget.categoryID))),
       focusColor: ProjectColors.projectBlue2,
       backgroundColor: ProjectColors.projectBlue2,
       hoverColor: ProjectColors.projectOrange,

@@ -8,9 +8,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:envanter_kontrol/viewmodel/product_vm.dart';
 
+import 'category_details.dart';
+
 class AddNewProductsPage extends StatefulWidget {
   final String categoryID;
-  const AddNewProductsPage({super.key, required this.categoryID});
+  final String categoryName;
+  const AddNewProductsPage(
+      {super.key, required this.categoryID, required this.categoryName});
 
   @override
   State<AddNewProductsPage> createState() => _AddNewProductsPageState();
@@ -62,13 +66,31 @@ class _AddNewProductsPageState extends State<AddNewProductsPage> {
                     height: 100,
                     child: ElevatedButton(
                         onPressed: () async {
+                          showDialog(
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text("Ürün Ekleniyor..."),
+                                content: Row(
+                                  children: const [
+                                    Expanded(flex: 1, child: SizedBox()),
+                                    CircularProgressIndicator(),
+                                    Expanded(flex: 1, child: SizedBox()),
+                                  ],
+                                ),
+                              );
+                            },
+                            context: context,
+                          );
+                          //---- Business code
                           if (await _addNewProduct()) {
-                            Navigator.of(context).push(PageRouteBuilder(
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) {
-                                return const HomePageCategories();
-                              },
-                            ));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CategoryPage(
+                                        categoryName: widget.categoryName,
+                                        categoryID: widget.categoryID)));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text("Ürün Başarıyla Eklendi")));
                           }
                         },
                         child: Text(
