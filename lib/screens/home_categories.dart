@@ -40,7 +40,9 @@ class _HomePageCategoriesState extends State<HomePageCategories> {
                       child: Center(
                           child: Column(
                         children: [
-                          Image.asset("images/main_logo.png", height: 200),
+                          Image.asset("images/main_logo.png",
+                              height: 200,
+                              width: MediaQuery.of(context).size.width / 2),
                           SizedBox(height: 20),
                           Text(
                             "Envanter Takip Yazılımı",

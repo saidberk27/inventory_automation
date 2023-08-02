@@ -101,4 +101,21 @@ class ProductViewModel {
       return false;
     }
   }
+
+  Future<List<Map<String, dynamic>>> searchProduct(
+      {required String categoryID, required String productName}) async {
+    print("YASTIK");
+    ProjectFirestore db = ProjectFirestore();
+    List<Map<String, dynamic>> productList =
+        await db.readAllDocumentsWithSearch(
+            collectionPath: "/categories/$categoryID/products",
+            isDescending: true,
+            searchField: "title",
+            searchValue: productName,
+            orderField: "timestamp");
+
+    print(productName);
+    print(productList);
+    return productList;
+  }
 }

@@ -28,6 +28,17 @@ class _CategoryPageState extends State<CategoryPage> {
 
   final TextEditingController _categoryDescUpdateController =
       TextEditingController();
+  final TextEditingController _searchFieldController = TextEditingController();
+  late Future<List<Map<String, dynamic>>> _listItems;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _listItems = ProductViewModel()
+        .getAllProductsOfCategory(categoryID: widget.categoryID);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,10 +52,42 @@ class _CategoryPageState extends State<CategoryPage> {
             widget.categoryName,
             style: ProjectTextStyle.whiteSmallStrong,
           ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 4,
+                    child: TextField(
+                      controller: _searchFieldController,
+                      decoration: InputDecoration(
+                        hintText: 'Arama yapın...',
+                        border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(18))),
+                        filled: true,
+                        fillColor: ProjectColors.projectWhite,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        debugPrint("Search...");
+                        _listItems = ProductViewModel().searchProduct(
+                            categoryID: widget.categoryID,
+                            productName: _searchFieldController.text);
+
+                        setState(() {});
+                      },
+                      icon: Icon(Icons.search))
+                ],
+              ),
+            ),
+          ],
         ),
         body: FutureBuilder(
-          future: ProductViewModel()
-              .getAllProductsOfCategory(categoryID: widget.categoryID),
+          future: _listItems,
           builder: (context, snapshotOUT) {
             if (snapshotOUT.hasData) {
               List<Map<String, dynamic>>? productList = snapshotOUT.data;
@@ -70,10 +113,6 @@ class _CategoryPageState extends State<CategoryPage> {
                         child: productsListView(productList: productList),
                       ),
                       Expanded(flex: 3, child: pieChart(dataMap: dataMap)),
-                      const Text(
-                        "Said Berk © HGT AJANS 2023",
-                        style: TextStyle(fontSize: 8),
-                      )
                     ],
                   ),
                 ),

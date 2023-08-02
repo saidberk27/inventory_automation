@@ -90,6 +90,32 @@ class ProjectFirestore {
     return documentMaps;
   }
 
+  Future<List<Map<String, dynamic>>> readAllDocumentsWithSearch(
+      {required String collectionPath,
+      required bool isDescending,
+      required String searchField,
+      required String searchValue,
+      required String orderField}) async {
+    List<Map<String, dynamic>> documentMaps = [];
+    await db
+        .collection(collectionPath)
+        .where(searchField, isEqualTo: searchValue)
+        .orderBy(orderField, descending: isDescending)
+        .get()
+        .then(
+      (querySnapshot) {
+        for (var docSnapshot in querySnapshot.docs) {
+          Map<String, dynamic> documentMap = docSnapshot.data();
+          documentMap.addAll({"id": docSnapshot.id});
+          documentMaps.add(documentMap);
+          //print('${docSnapshot.id} => ${docSnapshot.data()}');
+        }
+      },
+      onError: (e) => debugPrint("Error completing: $e"),
+    );
+    return documentMaps;
+  }
+
   Future<void> deleteCollection(String collectionPath) async {
     CollectionReference collectionRef =
         FirebaseFirestore.instance.collection(collectionPath);
