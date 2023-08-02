@@ -29,14 +29,20 @@ class _CategoryPageState extends State<CategoryPage> {
   final TextEditingController _categoryDescUpdateController =
       TextEditingController();
   final TextEditingController _searchFieldController = TextEditingController();
-  late Future<List<Map<String, dynamic>>> _listItems;
+  late Future<List<Map<String, dynamic>>> _categoryListItems;
 
+  late String _categoryMainText;
+  late TextButton _categoryMainButton;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _listItems = ProductViewModel()
-        .getAllProductsOfCategory(categoryID: widget.categoryID);
+    _categoryListItems = ProductViewModel().getAllProductsOfCategory(
+        categoryID: widget
+            .categoryID); // Arama sonuclarina gore hangi itemin dizilecegi degisiyor.
+    _categoryMainText = widget.categoryName; // Arama sonuclarina gore degisecek
+    _categoryMainButton =
+        editCategoryButton(); //Arama sonuclarina gore degisecek
   }
 
   @override
@@ -73,11 +79,28 @@ class _CategoryPageState extends State<CategoryPage> {
                   ),
                   IconButton(
                       onPressed: () {
-                        debugPrint("Search...");
-                        _listItems = ProductViewModel().searchProduct(
+                        _categoryListItems = ProductViewModel().searchProduct(
                             categoryID: widget.categoryID,
                             productName: _searchFieldController.text);
+                        _categoryMainText =
+                            "${_searchFieldController.text} için arama sonuçları: ";
 
+                        _categoryMainButton = TextButton(
+                            onPressed: () {
+                              //!!!! GERI DON TUSUNA BASILINCA BUTUN WIDGETLER ILK HALINE DONUYOR.
+                              _categoryListItems = ProductViewModel()
+                                  .getAllProductsOfCategory(
+                                      categoryID: widget.categoryID);
+
+                              _categoryMainText = widget.categoryName;
+
+                              _categoryMainButton = editCategoryButton();
+                              setState(() {});
+                            },
+                            child: Text(
+                              "Kategoriye Geri Dön",
+                              style: ProjectTextStyle.brownSmallStrong,
+                            ));
                         setState(() {});
                       },
                       icon: Icon(Icons.search))
@@ -87,7 +110,7 @@ class _CategoryPageState extends State<CategoryPage> {
           ],
         ),
         body: FutureBuilder(
-          future: _listItems,
+          future: _categoryListItems,
           builder: (context, snapshotOUT) {
             if (snapshotOUT.hasData) {
               List<Map<String, dynamic>>? productList = snapshotOUT.data;
@@ -160,7 +183,7 @@ class _CategoryPageState extends State<CategoryPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  widget.categoryName,
+                  _categoryMainText,
                   style: ProjectTextStyle.redMediumStrong,
                   textAlign: TextAlign.center,
                 ),
@@ -170,88 +193,86 @@ class _CategoryPageState extends State<CategoryPage> {
                   style: ProjectTextStyle.redMedium,
                 ),
                 const SizedBox(height: 10),
-                TextButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text("Kategoriyi Düzenle"),
-                          content: SizedBox(
-                            height: 100,
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  flex: 3,
-                                  child: TextFormField(
-                                    controller: _categoryNameUpdateController,
-                                    decoration: InputDecoration(
-                                      hintText: "YENİ KATEGORİ ADI",
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(24)),
-                                      prefixIcon: const Icon(Icons.abc),
-                                    ),
-                                  ),
-                                ),
-                                const Expanded(flex: 1, child: SizedBox()),
-                                Expanded(
-                                  flex: 3,
-                                  child: TextFormField(
-                                    controller: _categoryDescUpdateController,
-                                    decoration: InputDecoration(
-                                      hintText: "YENİ KATEGORİ AÇIKLAMASI",
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(24)),
-                                      prefixIcon: const Icon(Icons.abc),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          actions: [
-                            TextButton(
-                                onPressed: () async {
-                                  warningDialog(context);
-                                },
-                                child: const Text("Kategoriyi Sil")),
-                            TextButton(
-                                onPressed: () async {
-                                  CategoryViewModel vm = CategoryViewModel();
-                                  vm.updateCategoryInfo(
-                                      categoryID: widget.categoryID,
-                                      categoryTitle:
-                                          _categoryNameUpdateController.text,
-                                      categoryDesc:
-                                          _categoryDescUpdateController.text);
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          const HomePageCategories()));
-                                },
-                                child: const Text("Kategoriyi Güncelle")),
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text("İptal Et"))
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  style: ButtonStyle(
-                    side: MaterialStateProperty.all(
-                        BorderSide(color: ProjectColors.projectRed, width: 2)),
-                    foregroundColor: MaterialStateProperty.all(Colors.red),
-                  ),
-                  child: Text("Kategoriyi Düzenle",
-                      style: ProjectTextStyle.redSmallStrong),
-                )
+                _categoryMainButton
               ],
             )),
       ],
+    );
+  }
+
+  TextButton editCategoryButton() {
+    return TextButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("Kategoriyi Düzenle"),
+              content: SizedBox(
+                height: 100,
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: TextFormField(
+                        controller: _categoryNameUpdateController,
+                        decoration: InputDecoration(
+                          hintText: "YENİ KATEGORİ ADI",
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(24)),
+                          prefixIcon: const Icon(Icons.abc),
+                        ),
+                      ),
+                    ),
+                    const Expanded(flex: 1, child: SizedBox()),
+                    Expanded(
+                      flex: 3,
+                      child: TextFormField(
+                        controller: _categoryDescUpdateController,
+                        decoration: InputDecoration(
+                          hintText: "YENİ KATEGORİ AÇIKLAMASI",
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(24)),
+                          prefixIcon: const Icon(Icons.abc),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () async {
+                      warningDialog(context);
+                    },
+                    child: const Text("Kategoriyi Sil")),
+                TextButton(
+                    onPressed: () async {
+                      CategoryViewModel vm = CategoryViewModel();
+                      vm.updateCategoryInfo(
+                          categoryID: widget.categoryID,
+                          categoryTitle: _categoryNameUpdateController.text,
+                          categoryDesc: _categoryDescUpdateController.text);
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const HomePageCategories()));
+                    },
+                    child: const Text("Kategoriyi Güncelle")),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("İptal Et"))
+              ],
+            );
+          },
+        );
+      },
+      style: ButtonStyle(
+        side: MaterialStateProperty.all(
+            BorderSide(color: ProjectColors.projectRed, width: 2)),
+        foregroundColor: MaterialStateProperty.all(Colors.red),
+      ),
+      child: Text("Kategoriyi Düzenle", style: ProjectTextStyle.redSmallStrong),
     );
   }
 
