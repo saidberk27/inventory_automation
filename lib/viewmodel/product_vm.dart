@@ -123,11 +123,18 @@ class ProductViewModel {
   }
 
   Future<List<Map<String, dynamic>>> searchProduct(
-      {required String categoryID, required String productName}) async {
+      {required String categoryID,
+      required String productName,
+      String? subCategoryID}) async {
     ProjectFirestore db = ProjectFirestore();
+    late String collectionPath;
+    subCategoryID == null
+        ? collectionPath = "/categories/$categoryID/products"
+        : collectionPath =
+            "/categories/$categoryID/subcategories/$subCategoryID/products";
     List<Map<String, dynamic>> productList =
         await db.readAllDocumentsWithSearch(
-            collectionPath: "/categories/$categoryID/products",
+            collectionPath: collectionPath,
             isDescending: true,
             searchField: "title",
             searchValue: productName,

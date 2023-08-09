@@ -108,7 +108,10 @@ class ProjectFirestore {
       (querySnapshot) {
         for (var docSnapshot in querySnapshot.docs) {
           Map<String, dynamic> documentMap = docSnapshot.data();
-          if (documentMap['title'].contains(searchValue)) {
+          if (documentMap['title']
+              .toLowerCase()
+              .contains(searchValue.toLowerCase())) {
+            // LoweCase çünkü case-sensitive bir arama olsun istemiyorum.
             // Manuel olarak kurmak durumunda kaldım. Firebase Firestore desteklemiyormuş.
             documentMap.addAll({"id": docSnapshot.id});
             documentMaps.add(documentMap);

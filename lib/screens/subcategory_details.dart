@@ -88,7 +88,8 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                       onPressed: () {
                         _categoryListItems = ProductViewModel().searchProduct(
                             categoryID: widget.categoryID,
-                            productName: _searchFieldController.text);
+                            productName: _searchFieldController.text,
+                            subCategoryID: widget.subCategoryID);
                         _categoryMainText =
                             "${_searchFieldController.text} için arama sonuçları: ";
 
