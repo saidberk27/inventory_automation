@@ -90,29 +90,34 @@ class ProjectFirestore {
     return documentMaps;
   }
 
-  Future<List<Map<String, dynamic>>> readAllDocumentsWithSearch(
-      {required String collectionPath,
-      required bool isDescending,
-      required String searchField,
-      required String searchValue,
-      required String orderField}) async {
+  Future<List<Map<String, dynamic>>> readAllDocumentsWithSearch({
+    required String collectionPath,
+    required bool isDescending,
+    required String searchField,
+    required String searchValue,
+    required String orderField,
+  }) async {
+    List<String> documentTitles = [];
     List<Map<String, dynamic>> documentMaps = [];
+
     await db
         .collection(collectionPath)
-        .where(searchField, isEqualTo: searchValue)
         .orderBy(orderField, descending: isDescending)
         .get()
         .then(
       (querySnapshot) {
         for (var docSnapshot in querySnapshot.docs) {
           Map<String, dynamic> documentMap = docSnapshot.data();
-          documentMap.addAll({"id": docSnapshot.id});
-          documentMaps.add(documentMap);
-          //print('${docSnapshot.id} => ${docSnapshot.data()}');
+          if (documentMap['title'].contains(searchValue)) {
+            // Manuel olarak kurmak durumunda kaldım. Firebase Firestore desteklemiyormuş.
+            documentMap.addAll({"id": docSnapshot.id});
+            documentMaps.add(documentMap);
+          }
         }
       },
       onError: (e) => debugPrint("Error completing: $e"),
     );
+
     return documentMaps;
   }
 

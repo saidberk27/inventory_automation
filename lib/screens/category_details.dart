@@ -393,7 +393,6 @@ class _CategoryPageState extends State<CategoryPage> {
 
   ListView subCategoriesListView(
       {required List<Map<String, dynamic>>? subCategoriesList}) {
-    print("Sub Categoreis $subCategoriesList");
     return ListView.builder(
       itemCount: subCategoriesList!.length,
       itemBuilder: (context, index) {

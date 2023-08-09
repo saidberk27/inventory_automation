@@ -133,7 +133,6 @@ class _AddNewCategoryPageState extends State<AddNewCategoryPage> {
   }
 
   Future<bool> _addNewCategory() async {
-    print("aaaaaaaaaaa ${widget.categoryPath}");
     try {
       CategoryViewModel vm = CategoryViewModel();
       if (widget.categoryPath == null) {

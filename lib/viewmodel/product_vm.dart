@@ -124,7 +124,6 @@ class ProductViewModel {
 
   Future<List<Map<String, dynamic>>> searchProduct(
       {required String categoryID, required String productName}) async {
-    print("YASTIK");
     ProjectFirestore db = ProjectFirestore();
     List<Map<String, dynamic>> productList =
         await db.readAllDocumentsWithSearch(
@@ -134,8 +133,6 @@ class ProductViewModel {
             searchValue: productName,
             orderField: "timestamp");
 
-    print(productName);
-    print(productList);
     return productList;
   }
 }
