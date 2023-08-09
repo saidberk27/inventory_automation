@@ -11,14 +11,22 @@ class ProductViewModel {
   }
 
   Future<void> addNewProduct(
-      {required Product product, required String categoryID}) async {
+      {required Product product,
+      required String categoryID,
+      String? subCategoryID}) async {
     ProjectFirestore db = ProjectFirestore();
 
     Map<String, dynamic> document = product.toJson();
-
-    db.addDocument(
-        collectionPath: "categories/$categoryID/products",
-        document: document); //TODO Kategori Düzenle
+    if (subCategoryID == null) {
+      db.addDocument(
+          collectionPath: "categories/$categoryID/products",
+          document: document); //TODO Kategori Düzenle}
+    } else {
+      db.addDocument(
+          collectionPath:
+              "categories/$categoryID/subcategories/$subCategoryID/products",
+          document: document); //TODO Kategori Düzenle}
+    }
   }
 
   /*Future<List<Map<String, dynamic>>> getAllProducts() async {
@@ -34,12 +42,22 @@ class ProductViewModel {
   Future<List<Map<String, dynamic>>> getAllItemsOfCategory(
       {required String categoryID,
       required String itemType,
-      required String orderField}) async {
+      required String orderField,
+      String? subCategory}) async {
+    List<Map<String, dynamic>> productList;
     ProjectFirestore db = ProjectFirestore();
-    List<Map<String, dynamic>> productList = await db.readAllDocumentsWithOrder(
-        collectionPath: "/categories/$categoryID/$itemType",
-        orderField: orderField,
-        isDescending: true);
+    if (subCategory == null) {
+      productList = await db.readAllDocumentsWithOrder(
+          collectionPath: "/categories/$categoryID/$itemType",
+          orderField: orderField,
+          isDescending: true);
+    } else {
+      productList = await db.readAllDocumentsWithOrder(
+          collectionPath:
+              "/categories/$categoryID/subcategories/$subCategory/products",
+          orderField: orderField,
+          isDescending: true);
+    }
 
     return productList;
   }

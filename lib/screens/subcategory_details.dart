@@ -1,7 +1,5 @@
-import 'package:envanter_kontrol/screens/add_new_category.dart';
 import 'package:envanter_kontrol/screens/add_new_product.dart';
 import 'package:envanter_kontrol/screens/home_categories.dart';
-import 'package:envanter_kontrol/screens/subcategory_details.dart';
 import 'package:envanter_kontrol/viewmodel/category_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
@@ -12,18 +10,21 @@ import '../utils/text_styles.dart';
 import '../viewmodel/product_vm.dart';
 import '../widgets/footer.dart';
 
-class CategoryPage extends StatefulWidget {
-  late final String categoryName;
+class SubCategoryPage extends StatefulWidget {
+  late final String subCategoryName;
   late final String categoryID;
-
-  CategoryPage(
-      {super.key, required this.categoryName, required this.categoryID});
+  late final String subCategoryID;
+  SubCategoryPage(
+      {super.key,
+      required this.subCategoryName,
+      required this.categoryID,
+      required this.subCategoryID});
 
   @override
-  State<CategoryPage> createState() => _CategoryPageState();
+  State<SubCategoryPage> createState() => _SubCategoryPageState();
 }
 
-class _CategoryPageState extends State<CategoryPage> {
+class _SubCategoryPageState extends State<SubCategoryPage> {
   late Map<String, double> dataMap;
   final TextEditingController _categoryNameUpdateController =
       TextEditingController();
@@ -32,7 +33,6 @@ class _CategoryPageState extends State<CategoryPage> {
       TextEditingController();
   final TextEditingController _searchFieldController = TextEditingController();
   late Future<List<Map<String, dynamic>>> _categoryListItems;
-  late Future<List<Map<String, dynamic>>> _subCategoryListItems;
 
   late String _categoryMainText;
   late TextButton _categoryMainButton;
@@ -43,13 +43,11 @@ class _CategoryPageState extends State<CategoryPage> {
     _categoryListItems = ProductViewModel().getAllItemsOfCategory(
         categoryID: widget.categoryID,
         itemType: "products",
-        orderField:
-            "timestamp"); // Arama sonuclarina gore hangi itemin dizilecegi degisiyor.
-    _subCategoryListItems = ProductViewModel().getAllItemsOfCategory(
-        categoryID: widget.categoryID,
-        itemType: "subcategories",
-        orderField: "title");
-    _categoryMainText = widget.categoryName; // Arama sonuclarina gore degisecek
+        orderField: "timestamp",
+        subCategory: widget
+            .subCategoryID); // Arama sonuclarina gore hangi itemin dizilecegi degisiyor.
+    _categoryMainText =
+        widget.subCategoryName; // Arama sonuclarina gore degisecek
     _categoryMainButton =
         editCategoryButton(); //Arama sonuclarina gore degisecek
   }
@@ -64,7 +62,7 @@ class _CategoryPageState extends State<CategoryPage> {
         appBar: AppBar(
           foregroundColor: ProjectColors.projectWhite,
           title: Text(
-            widget.categoryName,
+            widget.subCategoryName,
             style: ProjectTextStyle.whiteSmallStrong,
           ),
           actions: [
@@ -78,7 +76,7 @@ class _CategoryPageState extends State<CategoryPage> {
                       controller: _searchFieldController,
                       decoration: InputDecoration(
                         hintText: 'Arama yapın...',
-                        border: const OutlineInputBorder(
+                        border: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(18))),
                         filled: true,
@@ -103,7 +101,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                       itemType: "products",
                                       orderField: "timestamp");
 
-                              _categoryMainText = widget.categoryName;
+                              _categoryMainText = widget.subCategoryName;
 
                               _categoryMainButton = editCategoryButton();
                               setState(() {});
@@ -114,7 +112,7 @@ class _CategoryPageState extends State<CategoryPage> {
                             ));
                         setState(() {});
                       },
-                      icon: const Icon(Icons.search))
+                      icon: Icon(Icons.search))
                 ],
               ),
             ),
@@ -122,9 +120,9 @@ class _CategoryPageState extends State<CategoryPage> {
         ),
         body: FutureBuilder(
           future: _categoryListItems,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              List<Map<String, dynamic>>? productList = snapshot.data;
+          builder: (context, snapshotOUT) {
+            if (snapshotOUT.hasData) {
+              List<Map<String, dynamic>>? productList = snapshotOUT.data;
               //INITIALIZING STATS AND TOTAL STOCK COUNT
               int totalNumberOfStocks = ProductStats(productList: productList!)
                   .calculateTotalStockCount();
@@ -142,8 +140,6 @@ class _CategoryPageState extends State<CategoryPage> {
                         flex: 2,
                         child: headerSection(totalStocks: totalNumberOfStocks),
                       ),
-                      Expanded(flex: 4, child: subcategoriesFutureBuilder()),
-                      Divider(),
                       Expanded(
                         flex: 4,
                         child: productsListView(productList: productList),
@@ -154,41 +150,22 @@ class _CategoryPageState extends State<CategoryPage> {
                 ),
               );
             } else {
-              return Center(child: const CircularProgressIndicator());
+              return const CircularProgressIndicator();
             }
           },
         ),
-        floatingActionButton: Stack(children: [
-          Positioned(
-              bottom: 16.0, right: 16.0, child: fabAddSubCategory(context)),
-          Positioned(
-              bottom: 72.0, right: 16.0, child: fabAddNewProduct(context))
-        ]));
+        floatingActionButton: customFAB(context));
   }
 
-  FutureBuilder<List<Map<String, dynamic>>> subcategoriesFutureBuilder() {
-    return FutureBuilder(
-      future: _subCategoryListItems,
-      builder: (context, snapshotIN) {
-        if (snapshotIN.hasData) {
-          List<Map<String, dynamic>>? subcategoriesList = snapshotIN.data;
-          return subCategoriesListView(
-              subCategoriesList: snapshotIN.data); //TODO BURA BAK
-        } else {
-          return Center(child: const CircularProgressIndicator());
-        }
-      },
-    );
-  }
-
-  FloatingActionButton fabAddNewProduct(BuildContext context) {
+  FloatingActionButton customFAB(BuildContext context) {
     return FloatingActionButton.extended(
       onPressed: () => Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => AddNewProductsPage(
-                  categoryName: widget.categoryName,
-                  categoryID: widget.categoryID))),
+                  categoryName: widget.subCategoryName,
+                  categoryID: widget.categoryID,
+                  subcategoryID: widget.subCategoryID))),
       focusColor: ProjectColors.projectBlue2,
       backgroundColor: ProjectColors.projectBlue2,
       hoverColor: ProjectColors.projectOrange,
@@ -196,28 +173,6 @@ class _CategoryPageState extends State<CategoryPage> {
       label: Row(
         children: [
           Text("Yeni Ürün Ekle", style: ProjectTextStyle.whiteSmallStrong),
-          const Icon(Icons.add)
-        ],
-      ),
-    );
-  }
-
-  FloatingActionButton fabAddSubCategory(BuildContext context) {
-    return FloatingActionButton.extended(
-      onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AddNewCategoryPage(
-                categoryPath: "categories/${widget.categoryID}"),
-          )),
-      focusColor: ProjectColors.projectOrange,
-      backgroundColor: ProjectColors.projectOrange,
-      hoverColor: ProjectColors.projectBlue2,
-      tooltip: "Yeni Alt Kategori Ekle",
-      label: Row(
-        children: [
-          Text("Yeni Alt Kategori Ekle",
-              style: ProjectTextStyle.whiteSmallStrong),
           const Icon(Icons.add)
         ],
       ),
@@ -307,7 +262,9 @@ class _CategoryPageState extends State<CategoryPage> {
                       vm.updateCategoryInfo(
                           categoryID: widget.categoryID,
                           categoryTitle: _categoryNameUpdateController.text,
-                          categoryDesc: _categoryDescUpdateController.text);
+                          categoryDesc: _categoryDescUpdateController.text,
+                          subCategoryID: widget.subCategoryID);
+
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => const HomePageCategories()));
                     },
@@ -346,8 +303,9 @@ class _CategoryPageState extends State<CategoryPage> {
           actions: [
             TextButton(
                 onPressed: () async {
-                  if (await CategoryViewModel()
-                      .deleteCategory(categoryID: widget.categoryID)) {
+                  if (await CategoryViewModel().deleteCategory(
+                      categoryID: widget.categoryID,
+                      subCategoryID: widget.subCategoryID)) {
                     await Future.delayed(const Duration(milliseconds: 500));
                     setState(() {});
                   }
@@ -385,34 +343,6 @@ class _CategoryPageState extends State<CategoryPage> {
                 descrption: productList[index]["description"],
                 productID: productList[index]["id"],
                 mediaURL: productList[index]["mediaURL"]);
-          },
-        );
-      },
-    );
-  }
-
-  ListView subCategoriesListView(
-      {required List<Map<String, dynamic>>? subCategoriesList}) {
-    print("Sub Categoreis $subCategoriesList");
-    return ListView.builder(
-      itemCount: subCategoriesList!.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          leading: Icon(
-            Icons.category,
-            color: ProjectColors.projectOrange,
-          ),
-          title: Text(subCategoriesList[index]["title"]),
-          subtitle: Text("Alt Kategori"),
-          trailing: const Icon(Icons.arrow_forward_ios),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => SubCategoryPage(
-                        subCategoryName: subCategoriesList[index]["title"],
-                        categoryID: widget.categoryID,
-                        subCategoryID: subCategoriesList[index]["id"])));
           },
         );
       },

@@ -1,5 +1,6 @@
 import 'package:envanter_kontrol/model/product.dart';
 import 'package:envanter_kontrol/screens/home_categories.dart';
+import 'package:envanter_kontrol/screens/subcategory_details.dart';
 
 import 'package:envanter_kontrol/utils/colors.dart';
 import 'package:envanter_kontrol/utils/text_styles.dart';
@@ -13,8 +14,12 @@ import 'category_details.dart';
 class AddNewProductsPage extends StatefulWidget {
   final String categoryID;
   final String categoryName;
+  final String? subcategoryID;
   const AddNewProductsPage(
-      {super.key, required this.categoryID, required this.categoryName});
+      {super.key,
+      required this.categoryID,
+      required this.categoryName,
+      this.subcategoryID});
 
   @override
   State<AddNewProductsPage> createState() => _AddNewProductsPageState();
@@ -83,12 +88,26 @@ class _AddNewProductsPageState extends State<AddNewProductsPage> {
                           );
                           //---- Business code
                           if (await _addNewProduct()) {
-                            Navigator.push(
+                            if (widget.subcategoryID == null) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => CategoryPage(
+                                          categoryName: widget.categoryName,
+                                          categoryID: widget.categoryID)));
+                            } else {
+                              Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => CategoryPage(
-                                        categoryName: widget.categoryName,
-                                        categoryID: widget.categoryID)));
+                                    builder: (context) => SubCategoryPage(
+                                        subCategoryID: widget.subcategoryID!,
+                                        subCategoryName: widget.categoryName,
+                                        categoryID:
+                                            widget.categoryID)), // Yeni sayfa
+                                (Route<dynamic> route) => route
+                                    .isFirst, // Tüm önceki sayfaları temizle
+                              );
+                            }
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text("Ürün Başarıyla Eklendi")));
                           }
@@ -178,7 +197,10 @@ class _AddNewProductsPageState extends State<AddNewProductsPage> {
           stockCount: int.parse(_productStockInfoController.text),
           mediaURL: productMediaURL,
           categoryID: widget.categoryID);
-      vm.addNewProduct(product: product, categoryID: widget.categoryID);
+      vm.addNewProduct(
+          product: product,
+          categoryID: widget.categoryID,
+          subCategoryID: widget.subcategoryID);
       return true;
     } catch (e) {
       if (kDebugMode) {

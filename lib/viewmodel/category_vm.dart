@@ -26,10 +26,17 @@ class CategoryViewModel {
     return categoryList;
   }
 
-  Future<bool> deleteCategory({required String categoryID}) async {
+  Future<bool> deleteCategory(
+      {required String categoryID, String? subCategoryID}) async {
     try {
       ProjectFirestore db = ProjectFirestore();
-      db.deleteDocument(path: "categories/", docID: categoryID);
+      if (subCategoryID == null) {
+        db.deleteDocument(path: "categories/", docID: categoryID);
+      } else {
+        db.deleteDocument(
+            path: "categories/$categoryID/subcategories/",
+            docID: subCategoryID);
+      }
       return true;
     } catch (e) {
       debugPrint(e.toString());
@@ -40,7 +47,8 @@ class CategoryViewModel {
   Future<bool> updateCategoryInfo(
       {required String categoryID,
       required String categoryTitle,
-      required String categoryDesc}) async {
+      required String categoryDesc,
+      String? subCategoryID}) async {
     try {
       Map<String, dynamic> newCategoryInfo = {};
 
@@ -53,8 +61,15 @@ class CategoryViewModel {
       }
       ProjectFirestore db = ProjectFirestore();
 
-      db.updateDocument(
-          path: "categories/", docID: categoryID, newData: newCategoryInfo);
+      if (subCategoryID == null) {
+        db.updateDocument(
+            path: "categories/", docID: categoryID, newData: newCategoryInfo);
+      } else {
+        db.updateDocument(
+            path: "categories/$categoryID/subcategories/",
+            docID: subCategoryID,
+            newData: newCategoryInfo);
+      }
 
       return true;
     } catch (e) {
