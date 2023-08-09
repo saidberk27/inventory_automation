@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 import '../model/project_firestore.dart';
 
 class CategoryViewModel {
-  Future<void> addNewCategory({required ProductCategory category}) async {
+  Future<void> addNewCategory(
+      {String? categoryPath, required ProductCategory category}) async {
     ProjectFirestore db = ProjectFirestore();
 
     Map<String, dynamic> document = category.toJson();
-
-    db.addDocument(collectionPath: "categories/", document: document);
+    if (categoryPath == null) {
+      db.addDocument(collectionPath: "categories/", document: document);
+    } else {
+      db.addDocument(collectionPath: categoryPath, document: document);
+    }
   }
 
   Future<List<Map<String, dynamic>>> getAllCategories() async {

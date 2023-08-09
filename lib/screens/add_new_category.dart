@@ -9,7 +9,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class AddNewCategoryPage extends StatefulWidget {
-  const AddNewCategoryPage({super.key});
+  final String? categoryPath;
+  const AddNewCategoryPage({super.key, String? this.categoryPath});
 
   @override
   State<AddNewCategoryPage> createState() => _AddNewCategoryPageState();
@@ -132,14 +133,26 @@ class _AddNewCategoryPageState extends State<AddNewCategoryPage> {
   }
 
   Future<bool> _addNewCategory() async {
+    print("aaaaaaaaaaa ${widget.categoryPath}");
     try {
       CategoryViewModel vm = CategoryViewModel();
+      if (widget.categoryPath == null) {
+        // Main Category
+        ProductCategory category = ProductCategory(
+            title: _categoryNameController.text,
+            description: _categoryDescriptionController.text);
+        vm.addNewCategory(category: category);
+        return true;
+      } else {
+        ProductCategory category = ProductCategory(
+            title: _categoryNameController.text,
+            description: _categoryDescriptionController.text);
+        vm.addNewCategory(
+            categoryPath: "${widget.categoryPath}/subcategories/",
+            category: category);
 
-      ProductCategory category = ProductCategory(
-          title: _categoryNameController.text,
-          description: _categoryDescriptionController.text);
-      vm.addNewCategory(category: category);
-      return true;
+        return true;
+      }
     } catch (e) {
       if (kDebugMode) {
         print("e");

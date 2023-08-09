@@ -31,12 +31,14 @@ class ProductViewModel {
     return productList;
   }*/
 
-  Future<List<Map<String, dynamic>>> getAllProductsOfCategory(
-      {required String categoryID}) async {
+  Future<List<Map<String, dynamic>>> getAllItemsOfCategory(
+      {required String categoryID,
+      required String itemType,
+      required String orderField}) async {
     ProjectFirestore db = ProjectFirestore();
     List<Map<String, dynamic>> productList = await db.readAllDocumentsWithOrder(
-        collectionPath: "/categories/$categoryID/products",
-        orderField: "timestamp",
+        collectionPath: "/categories/$categoryID/$itemType",
+        orderField: orderField,
         isDescending: true);
 
     return productList;

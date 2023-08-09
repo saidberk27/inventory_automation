@@ -1,3 +1,4 @@
+import 'package:envanter_kontrol/screens/add_new_category.dart';
 import 'package:envanter_kontrol/screens/add_new_product.dart';
 import 'package:envanter_kontrol/screens/home_categories.dart';
 import 'package:envanter_kontrol/viewmodel/category_vm.dart';
@@ -30,6 +31,7 @@ class _CategoryPageState extends State<CategoryPage> {
       TextEditingController();
   final TextEditingController _searchFieldController = TextEditingController();
   late Future<List<Map<String, dynamic>>> _categoryListItems;
+  late Future<List<Map<String, dynamic>>> _subCategoryListItems;
 
   late String _categoryMainText;
   late TextButton _categoryMainButton;
@@ -37,9 +39,15 @@ class _CategoryPageState extends State<CategoryPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _categoryListItems = ProductViewModel().getAllProductsOfCategory(
-        categoryID: widget
-            .categoryID); // Arama sonuclarina gore hangi itemin dizilecegi degisiyor.
+    _categoryListItems = ProductViewModel().getAllItemsOfCategory(
+        categoryID: widget.categoryID,
+        itemType: "products",
+        orderField:
+            "timestamp"); // Arama sonuclarina gore hangi itemin dizilecegi degisiyor.
+    _subCategoryListItems = ProductViewModel().getAllItemsOfCategory(
+        categoryID: widget.categoryID,
+        itemType: "subcategories",
+        orderField: "title");
     _categoryMainText = widget.categoryName; // Arama sonuclarina gore degisecek
     _categoryMainButton =
         editCategoryButton(); //Arama sonuclarina gore degisecek
@@ -69,7 +77,7 @@ class _CategoryPageState extends State<CategoryPage> {
                       controller: _searchFieldController,
                       decoration: InputDecoration(
                         hintText: 'Arama yapın...',
-                        border: OutlineInputBorder(
+                        border: const OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(18))),
                         filled: true,
@@ -89,8 +97,10 @@ class _CategoryPageState extends State<CategoryPage> {
                             onPressed: () {
                               //!!!! GERI DON TUSUNA BASILINCA BUTUN WIDGETLER ILK HALINE DONUYOR.
                               _categoryListItems = ProductViewModel()
-                                  .getAllProductsOfCategory(
-                                      categoryID: widget.categoryID);
+                                  .getAllItemsOfCategory(
+                                      categoryID: widget.categoryID,
+                                      itemType: "products",
+                                      orderField: "timestamp");
 
                               _categoryMainText = widget.categoryName;
 
@@ -103,7 +113,7 @@ class _CategoryPageState extends State<CategoryPage> {
                             ));
                         setState(() {});
                       },
-                      icon: Icon(Icons.search))
+                      icon: const Icon(Icons.search))
                 ],
               ),
             ),
@@ -111,9 +121,9 @@ class _CategoryPageState extends State<CategoryPage> {
         ),
         body: FutureBuilder(
           future: _categoryListItems,
-          builder: (context, snapshotOUT) {
-            if (snapshotOUT.hasData) {
-              List<Map<String, dynamic>>? productList = snapshotOUT.data;
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              List<Map<String, dynamic>>? productList = snapshot.data;
               //INITIALIZING STATS AND TOTAL STOCK COUNT
               int totalNumberOfStocks = ProductStats(productList: productList!)
                   .calculateTotalStockCount();
@@ -132,6 +142,22 @@ class _CategoryPageState extends State<CategoryPage> {
                         child: headerSection(totalStocks: totalNumberOfStocks),
                       ),
                       Expanded(
+                          child: FutureBuilder(
+                        future: _subCategoryListItems,
+                        builder: (context, snapshotIN) {
+                          if (snapshotIN.hasData) {
+                            List<Map<String, dynamic>>? subcategoriesList =
+                                snapshotIN.data;
+                            return subCategoriesListView(
+                                subCategoriesList:
+                                    snapshotIN.data); //TODO BURA BAK
+                          } else {
+                            return Center(
+                                child: const CircularProgressIndicator());
+                          }
+                        },
+                      )),
+                      Expanded(
                         flex: 4,
                         child: productsListView(productList: productList),
                       ),
@@ -141,14 +167,19 @@ class _CategoryPageState extends State<CategoryPage> {
                 ),
               );
             } else {
-              return const CircularProgressIndicator();
+              return Center(child: const CircularProgressIndicator());
             }
           },
         ),
-        floatingActionButton: customFAB(context));
+        floatingActionButton: Stack(children: [
+          Positioned(
+              bottom: 16.0, right: 16.0, child: fabAddSubCategory(context)),
+          Positioned(
+              bottom: 72.0, right: 16.0, child: fabAddNewProduct(context))
+        ]));
   }
 
-  FloatingActionButton customFAB(BuildContext context) {
+  FloatingActionButton fabAddNewProduct(BuildContext context) {
     return FloatingActionButton.extended(
       onPressed: () => Navigator.push(
           context,
@@ -163,6 +194,28 @@ class _CategoryPageState extends State<CategoryPage> {
       label: Row(
         children: [
           Text("Yeni Ürün Ekle", style: ProjectTextStyle.whiteSmallStrong),
+          const Icon(Icons.add)
+        ],
+      ),
+    );
+  }
+
+  FloatingActionButton fabAddSubCategory(BuildContext context) {
+    return FloatingActionButton.extended(
+      onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AddNewCategoryPage(
+                categoryPath: "categories/${widget.categoryID}"),
+          )),
+      focusColor: ProjectColors.projectOrange,
+      backgroundColor: ProjectColors.projectOrange,
+      hoverColor: ProjectColors.projectBlue2,
+      tooltip: "Yeni Alt Kategori Ekle",
+      label: Row(
+        children: [
+          Text("Yeni Alt Kategori Ekle",
+              style: ProjectTextStyle.whiteSmallStrong),
           const Icon(Icons.add)
         ],
       ),
@@ -331,6 +384,26 @@ class _CategoryPageState extends State<CategoryPage> {
                 productID: productList[index]["id"],
                 mediaURL: productList[index]["mediaURL"]);
           },
+        );
+      },
+    );
+  }
+
+  ListView subCategoriesListView(
+      {required List<Map<String, dynamic>>? subCategoriesList}) {
+    print("Sub Categoreis $subCategoriesList");
+    return ListView.builder(
+      itemCount: subCategoriesList!.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          leading: Icon(
+            Icons.category,
+            color: ProjectColors.projectOrange,
+          ),
+          title: Text(subCategoriesList[index]["title"]),
+          subtitle: Text("Alt Kategori"),
+          trailing: const Icon(Icons.arrow_forward_ios),
+          onTap: () {},
         );
       },
     );
