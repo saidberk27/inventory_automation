@@ -99,7 +99,8 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                                   .getAllItemsOfCategory(
                                       categoryID: widget.categoryID,
                                       itemType: "products",
-                                      orderField: "timestamp");
+                                      orderField: "timestamp",
+                                      subCategory: widget.subCategoryID);
 
                               _categoryMainText = widget.subCategoryName;
 
@@ -107,7 +108,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                               setState(() {});
                             },
                             child: Text(
-                              "Kategoriye Geri Dön",
+                              "Alt Kategoriye Geri Dön",
                               style: ProjectTextStyle.brownSmallStrong,
                             ));
                         setState(() {});
@@ -268,7 +269,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => const HomePageCategories()));
                     },
-                    child: const Text("Kategoriyi Güncelle")),
+                    child: const Text("Alt Kategoriyi Güncelle")),
                 TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -284,7 +285,8 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
             BorderSide(color: ProjectColors.projectRed, width: 2)),
         foregroundColor: MaterialStateProperty.all(Colors.red),
       ),
-      child: Text("Kategoriyi Düzenle", style: ProjectTextStyle.redSmallStrong),
+      child: Text("Alt Kategoriyi Düzenle",
+          style: ProjectTextStyle.redSmallStrong),
     );
   }
 
