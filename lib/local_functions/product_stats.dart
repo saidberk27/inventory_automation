@@ -37,7 +37,7 @@ class ProductStats {
     }
 
     if (kDebugMode) {
-      print(pieChartMap);
+      print("pieChartMap $pieChartMap");
     }
     return pieChartMap;
   }

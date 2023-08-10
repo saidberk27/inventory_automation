@@ -20,12 +20,12 @@ class ProductViewModel {
     if (subCategoryID == null) {
       db.addDocument(
           collectionPath: "categories/$categoryID/products",
-          document: document); //TODO Kategori Düzenle}
+          document: document);
     } else {
       db.addDocument(
           collectionPath:
               "categories/$categoryID/subcategories/$subCategoryID/products",
-          document: document); //TODO Kategori Düzenle}
+          document: document);
     }
   }
 
@@ -65,15 +65,18 @@ class ProductViewModel {
   Future<bool> updateStockInfo(
       {required String categoryID,
       required String docID,
-      required String newStock}) async {
+      required String newStock,
+      String? subcategoryID}) async {
     try {
-      //int InewStock = int.parse(newStock);
+      late String path;
+      subcategoryID == null
+          ? path = "categories/$categoryID/products"
+          : path =
+              "categories/$categoryID/subcategories/$subcategoryID/products";
       ProjectFirestore db = ProjectFirestore();
       int newStockFinal = int.parse(newStock);
       db.updateDocument(
-          path: "categories/$categoryID/products",
-          docID: docID,
-          newData: {"stockCount": newStockFinal});
+          path: path, docID: docID, newData: {"stockCount": newStockFinal});
       return true;
     } catch (e) {
       return false;
@@ -81,10 +84,17 @@ class ProductViewModel {
   }
 
   Future<bool> deleteProduct(
-      {required String categoryID, required String docID}) async {
+      {required String categoryID,
+      required String docID,
+      String? subcategoryID}) async {
     try {
+      late String path;
+      subcategoryID == null
+          ? path = "categories/$categoryID/products"
+          : path =
+              "categories/$categoryID/subcategories/$subcategoryID/products";
       ProjectFirestore db = ProjectFirestore();
-      db.deleteDocument(path: "categories/$categoryID/products/", docID: docID);
+      db.deleteDocument(path: path, docID: docID);
       return true;
     } catch (e) {
       return false;
@@ -93,28 +103,43 @@ class ProductViewModel {
 
   Future<bool> updateProductInfo(
       {required String categoryID,
+      String? subcategoryID,
       required String docID,
       required String productTitle,
-      required String productDescrption}) async {
+      required String productDescrption,
+      required int? tagPrice,
+      required int? retailPrice,
+      required int? buyPrice}) async {
     try {
       Map<String, dynamic> newProductInfo = {};
+      late String path;
+      subcategoryID == null
+          ? path = "categories/$categoryID/products"
+          : path =
+              "categories/$categoryID/subcategories/$subcategoryID/products";
+      productTitle == ""
+          ? newProductInfo.addAll({})
+          : newProductInfo.addAll({"title": productTitle});
 
-      if (productTitle == "" && productDescrption != "") {
-        newProductInfo = {"description": productDescrption};
-      } else if (productTitle != "" && productDescrption == "") {
-        newProductInfo = {"title": productTitle};
-      } else {
-        newProductInfo = {
-          "title": productTitle,
-          "description": productDescrption
-        };
-      }
+      productDescrption == ""
+          ? newProductInfo.addAll({})
+          : newProductInfo.addAll({"description": productDescrption});
+
+      tagPrice == "" || tagPrice == null
+          ? newProductInfo.addAll({})
+          : newProductInfo.addAll({"tagPrice": tagPrice});
+
+      retailPrice == "" || retailPrice == null
+          ? newProductInfo.addAll({})
+          : newProductInfo.addAll({"retailPrice": retailPrice});
+
+      buyPrice == "" || buyPrice == null
+          ? newProductInfo.addAll({})
+          : newProductInfo.addAll({"buyPrice": buyPrice});
+
       ProjectFirestore db = ProjectFirestore();
 
-      db.updateDocument(
-          path: "categories/$categoryID/products",
-          docID: docID,
-          newData: newProductInfo);
+      db.updateDocument(path: path, docID: docID, newData: newProductInfo);
 
       return true;
     } catch (e) {

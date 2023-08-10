@@ -34,11 +34,16 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
   final TextEditingController _searchFieldController = TextEditingController();
   late Future<List<Map<String, dynamic>>> _categoryListItems;
 
+  final TextEditingController _productTitleController = TextEditingController();
+  final TextEditingController _productDescriptionController =
+      TextEditingController();
+  final TextEditingController _tagPriceController = TextEditingController();
+  final TextEditingController _buyPriceController = TextEditingController();
+  final TextEditingController _retailPriceController = TextEditingController();
   late String _categoryMainText;
   late TextButton _categoryMainButton;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _categoryListItems = ProductViewModel().getAllItemsOfCategory(
         categoryID: widget.categoryID,
@@ -54,6 +59,11 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    _categoryListItems = ProductViewModel().getAllItemsOfCategory(
+        categoryID: widget.categoryID,
+        itemType: "products",
+        orderField: "timestamp",
+        subCategory: widget.subCategoryID);
     return Scaffold(
         bottomNavigationBar: const Padding(
           padding: EdgeInsets.only(bottom: 8.0),
@@ -76,7 +86,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                       controller: _searchFieldController,
                       decoration: InputDecoration(
                         hintText: 'Arama yapın...',
-                        border: OutlineInputBorder(
+                        border: const OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(18))),
                         filled: true,
@@ -114,7 +124,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                             ));
                         setState(() {});
                       },
-                      icon: Icon(Icons.search))
+                      icon: const Icon(Icons.search))
                 ],
               ),
             ),
@@ -344,6 +354,9 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                 title: productList[index]["title"],
                 stock: productList[index]["stockCount"],
                 descrption: productList[index]["description"],
+                buyPrice: productList[index]["buyPrice"],
+                tagPrice: productList[index]["tagPrice"],
+                retailPrice: productList[index]["retailPrice"],
                 productID: productList[index]["id"],
                 mediaURL: productList[index]["mediaURL"]);
           },
@@ -369,6 +382,9 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
       required int stock,
       required String descrption,
       required String productID,
+      required int buyPrice,
+      required int tagPrice,
+      required int retailPrice,
       required String mediaURL}) {
     return showDialog(
         context: context,
@@ -377,16 +393,18 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
             title: Text(title),
             contentPadding: const EdgeInsets.all(20),
             content: SizedBox(
-              height: MediaQuery.of(context).size.height / 4,
+              height: MediaQuery.of(context).size.height / 3,
               child: Column(
                 mainAxisSize: MainAxisSize.min, // eklenen mainAxisSize
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Stok: ${stock.toString()}'),
+                  Text('Alış Fiyatı ${buyPrice.toString()}'),
+                  Text('Etiket Fiyatı: ${tagPrice.toString()}'),
+                  Text('PSF: ${retailPrice.toString()}'),
                   Text(descrption),
                   InkWell(
                     onTap: () {
-                      debugPrint("Tıklandı");
                       showDialog(
                         context: context,
                         builder: (context) {
@@ -423,10 +441,6 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
               ),
               TextButton(
                 onPressed: () {
-                  TextEditingController productTitleController =
-                      TextEditingController();
-                  TextEditingController productDescriptionController =
-                      TextEditingController();
                   Navigator.of(context).pop(); // Diyalog penceresini kapatır
 
                   showDialog(
@@ -435,35 +449,42 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                       return AlertDialog(
                         title: const Text("Ürünü Düzenle"),
                         content: SizedBox(
-                          height: 100,
+                          height: MediaQuery.of(context).size.height / 1.2,
                           child: Column(
                             children: [
                               Expanded(
                                 flex: 3,
-                                child: TextFormField(
-                                  controller: productTitleController,
-                                  decoration: InputDecoration(
-                                    hintText: "YENİ ÜRÜN ADI",
-                                    border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(24)),
-                                    prefixIcon: const Icon(Icons.abc),
-                                  ),
-                                ),
+                                child: alertDialogTextFormField(
+                                    controller: _productTitleController,
+                                    hintText: "Yeni Ürün İsmi"),
                               ),
                               const Expanded(flex: 1, child: SizedBox()),
                               Expanded(
                                 flex: 3,
-                                child: TextFormField(
-                                  controller: productDescriptionController,
-                                  decoration: InputDecoration(
-                                    hintText: "YENİ ÜRÜN AÇIKLAMASI",
-                                    border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(24)),
-                                    prefixIcon: const Icon(Icons.abc),
-                                  ),
-                                ),
+                                child: alertDialogTextFormField(
+                                    controller: _productDescriptionController,
+                                    hintText: "Yeni Ürün Açıklaması"),
+                              ),
+                              const Expanded(flex: 1, child: SizedBox()),
+                              Expanded(
+                                flex: 3,
+                                child: alertDialogTextFormField(
+                                    controller: _buyPriceController,
+                                    hintText: "Yeni Alış Fiyatı"),
+                              ),
+                              const Expanded(flex: 1, child: SizedBox()),
+                              Expanded(
+                                flex: 3,
+                                child: alertDialogTextFormField(
+                                    controller: _tagPriceController,
+                                    hintText: "Yeni Etiket Fiyatı"),
+                              ),
+                              const Expanded(flex: 1, child: SizedBox()),
+                              Expanded(
+                                flex: 3,
+                                child: alertDialogTextFormField(
+                                    controller: _retailPriceController,
+                                    hintText: "Yeni PSF"),
                               ),
                             ],
                           ),
@@ -476,12 +497,12 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                                 if (await productViewModel.deleteProduct(
                                     categoryID: widget.categoryID,
                                     docID: productID)) {
+                                  Navigator.of(context).pop();
+
                                   await Future.delayed(
                                       const Duration(milliseconds: 500));
                                   setState(() {});
                                 }
-
-                                Navigator.of(context).pop();
                               },
                               child: const Text("Ürünü Sil")),
                           TextButton(
@@ -489,14 +510,26 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                                 ProductViewModel productViewModel =
                                     ProductViewModel();
                                 if (await productViewModel.updateProductInfo(
-                                    categoryID: widget.categoryID,
-                                    docID: productID,
-                                    productTitle: productTitleController.text,
-                                    productDescrption:
-                                        productDescriptionController.text)) {
+                                  categoryID: widget.categoryID,
+                                  docID: productID,
+                                  productTitle: _productTitleController.text,
+                                  productDescrption:
+                                      _productDescriptionController.text,
+                                  tagPrice: _tagPriceController.text == ""
+                                      ? null
+                                      : int.parse(_tagPriceController.text),
+                                  retailPrice: _tagPriceController.text == ""
+                                      ? null
+                                      : int.parse(_retailPriceController.text),
+                                  buyPrice: _tagPriceController.text == ""
+                                      ? null
+                                      : int.parse(_buyPriceController.text),
+                                )) {
                                   await Future.delayed(
-                                      const Duration(milliseconds: 500));
-                                  setState(() {});
+                                          const Duration(milliseconds: 500))
+                                      .then((value) {
+                                    setState(() {});
+                                  });
                                 }
 
                                 Navigator.of(context).pop();
@@ -525,6 +558,18 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
         }));
   }
 
+  TextFormField alertDialogTextFormField(
+      {required TextEditingController controller, required String hintText}) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        hintText: hintText,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(24)),
+        prefixIcon: const Icon(Icons.abc),
+      ),
+    );
+  }
+
   Future<dynamic> enterNewStockInfo(BuildContext context,
       {required String productID}) {
     TextEditingController stockController = TextEditingController();
@@ -550,6 +595,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                       ProductViewModel productViewModel = ProductViewModel();
                       if (await productViewModel.updateStockInfo(
                           categoryID: widget.categoryID,
+                          subcategoryID: widget.subCategoryID,
                           docID: productID,
                           newStock: stockController.text)) {
                         await Future.delayed(const Duration(

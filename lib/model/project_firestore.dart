@@ -20,6 +20,7 @@ class ProjectFirestore {
       {required String path,
       required String docID,
       required Map<String, dynamic> newData}) async {
+    debugPrint("Updated Data $newData");
     DocumentReference docRef =
         FirebaseFirestore.instance.collection(path).doc(docID);
     docRef
@@ -97,7 +98,6 @@ class ProjectFirestore {
     required String searchValue,
     required String orderField,
   }) async {
-    List<String> documentTitles = [];
     List<Map<String, dynamic>> documentMaps = [];
 
     await db

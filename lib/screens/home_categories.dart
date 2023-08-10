@@ -43,7 +43,7 @@ class _HomePageCategoriesState extends State<HomePageCategories> {
                           Image.asset("images/main_logo.png",
                               height: 200,
                               width: MediaQuery.of(context).size.width / 2),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Text(
                             "Envanter Takip Yazılımı",
                             style: ProjectTextStyle.redMediumStrong,

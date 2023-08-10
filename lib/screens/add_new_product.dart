@@ -1,5 +1,4 @@
 import 'package:envanter_kontrol/model/product.dart';
-import 'package:envanter_kontrol/screens/home_categories.dart';
 import 'package:envanter_kontrol/screens/subcategory_details.dart';
 
 import 'package:envanter_kontrol/utils/colors.dart';
@@ -25,7 +24,9 @@ class AddNewProductsPage extends StatefulWidget {
   State<AddNewProductsPage> createState() => _AddNewProductsPageState();
 }
 
-class _AddNewProductsPageState extends State<AddNewProductsPage> {
+class _AddNewProductsPageState extends State<AddNewProductsPage>
+    with TickerProviderStateMixin {
+  late AnimationController _animationController;
   final TextEditingController _productNameController = TextEditingController();
 
   final TextEditingController _productDescriptionController =
@@ -33,8 +34,32 @@ class _AddNewProductsPageState extends State<AddNewProductsPage> {
 
   final TextEditingController _productStockInfoController =
       TextEditingController();
+
+  final TextEditingController _buyPriceController = TextEditingController();
+
+  final TextEditingController _tagPriceController = TextEditingController();
+
+  final TextEditingController _retailPriceController = TextEditingController();
+
   String filename = "";
   FilePickerResult? result;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+      // Red Arrow Animation
+      vsync: this,
+      duration: const Duration(milliseconds: 3000),
+    )..repeat(reverse: true);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,82 +70,117 @@ class _AddNewProductsPageState extends State<AddNewProductsPage> {
           style: ProjectTextStyle.whiteSmallStrong,
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Center(
-            child: SizedBox(
-          width: MediaQuery.of(context).size.width / 1.5,
-          child: Form(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                titleAndInput(
-                    title: "Ürün Adı",
-                    textEditingController: _productNameController),
-                const Divider(thickness: 2),
-                titleAndInput(
-                    title: "Ürün Açıklaması",
-                    textEditingController: _productDescriptionController),
-                const Divider(thickness: 2),
-                titleAndInput(
-                    title: "Ürün Stok Sayısı",
-                    textEditingController: _productStockInfoController),
-                filePickerSection(),
-                SizedBox(
-                    width: 200,
-                    height: 100,
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          showDialog(
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text("Ürün Ekleniyor..."),
-                                content: Row(
-                                  children: const [
-                                    Expanded(flex: 1, child: SizedBox()),
-                                    CircularProgressIndicator(),
-                                    Expanded(flex: 1, child: SizedBox()),
-                                  ],
-                                ),
-                              );
-                            },
-                            context: context,
-                          );
-                          //---- Business code
-                          if (await _addNewProduct()) {
-                            if (widget.subcategoryID == null) {
-                              Navigator.push(
+      body: Stack(children: [
+        AnimatedBuilder(
+          animation: _animationController,
+          builder: (context, child) {
+            return Positioned(
+              left: MediaQuery.of(context).size.width / 1.2,
+              top: MediaQuery.of(context).size.height / 2,
+              child: Icon(
+                Icons.arrow_downward,
+                size: 96,
+                color: _animationController.value < 0.5
+                    ? Colors.transparent
+                    : ProjectColors.projectRed,
+              ),
+            );
+          },
+        ),
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: SingleChildScrollView(
+            child: Center(
+                child: SizedBox(
+              width: MediaQuery.of(context).size.width / 1.5,
+              child: Form(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    titleAndInput(
+                        title: "Ürün Adı",
+                        textEditingController: _productNameController),
+                    const Divider(thickness: 2),
+                    titleAndInput(
+                        title: "Ürün Açıklaması",
+                        textEditingController: _productDescriptionController),
+                    const Divider(thickness: 2),
+                    titleAndInput(
+                        title: "Alış Fiyatı",
+                        textEditingController: _buyPriceController),
+                    const Divider(thickness: 2),
+                    titleAndInput(
+                        title: "Etiket Fiyatı",
+                        textEditingController: _tagPriceController),
+                    const Divider(thickness: 2),
+                    titleAndInput(
+                        title: "PSF Fiyatı",
+                        textEditingController: _retailPriceController),
+                    const Divider(thickness: 2),
+                    titleAndInput(
+                        title: "Ürün Stok Sayısı",
+                        textEditingController: _productStockInfoController),
+                    SizedBox(height: MediaQuery.of(context).size.height / 24),
+                    filePickerSection(),
+                    SizedBox(height: MediaQuery.of(context).size.height / 24),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 8,
+                      child: ElevatedButton(
+                          onPressed: () async {
+                            showDialog(
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text("Ürün Ekleniyor..."),
+                                  content: Row(
+                                    children: const [
+                                      Expanded(flex: 1, child: SizedBox()),
+                                      CircularProgressIndicator(),
+                                      Expanded(flex: 1, child: SizedBox()),
+                                    ],
+                                  ),
+                                );
+                              },
+                              context: context,
+                            );
+                            //---- Business code
+                            if (await _addNewProduct()) {
+                              if (widget.subcategoryID == null) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => CategoryPage(
+                                            categoryName: widget.categoryName,
+                                            categoryID: widget.categoryID)));
+                              } else {
+                                Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => CategoryPage(
-                                          categoryName: widget.categoryName,
-                                          categoryID: widget.categoryID)));
-                            } else {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SubCategoryPage(
-                                        subCategoryID: widget.subcategoryID!,
-                                        subCategoryName: widget.categoryName,
-                                        categoryID:
-                                            widget.categoryID)), // Yeni sayfa
-                                (Route<dynamic> route) => route
-                                    .isFirst, // Tüm önceki sayfaları temizle
-                              );
+                                      builder: (context) => SubCategoryPage(
+                                          subCategoryID: widget.subcategoryID!,
+                                          subCategoryName: widget.categoryName,
+                                          categoryID:
+                                              widget.categoryID)), // Yeni sayfa
+                                  (Route<dynamic> route) => route
+                                      .isFirst, // Tüm önceki sayfaları temizle
+                                );
+                              }
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text("Ürün Başarıyla Eklendi")));
                             }
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text("Ürün Başarıyla Eklendi")));
-                          }
-                        },
-                        child: Text(
-                          "Yeni Ürün Ekle",
-                          style: ProjectTextStyle.whiteSmallStrong,
-                        )))
-              ],
-            ),
+                          },
+                          child: Text(
+                            "Yeni Ürün Ekle",
+                            style: ProjectTextStyle.whiteSmallStrong,
+                          )),
+                    )
+                  ],
+                ),
+              ),
+            )),
           ),
-        )),
-      ),
+        ),
+      ]),
     );
   }
 
@@ -128,28 +188,40 @@ class _AddNewProductsPageState extends State<AddNewProductsPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        ElevatedButton(
-          onPressed: () async {
-            result = await FilePicker.platform.pickFiles(
-              type: FileType.custom,
-              allowedExtensions: ['jpg', 'png'],
-            );
+        SizedBox(
+          height: MediaQuery.of(context).size.height / 12,
+          child: ElevatedButton(
+            onPressed: () async {
+              result = await FilePicker.platform.pickFiles(
+                type: FileType.custom,
+                allowedExtensions: ['jpg', 'png'],
+              );
 
-            if (result != null) {
-              PlatformFile file = result!.files.first;
-              filename = file.name;
-              await Future.delayed(const Duration(milliseconds: 500));
-              setState(() {});
-            }
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: ProjectColors.projectWhite,
-            side: BorderSide(
-              color: ProjectColors.projectRed,
-              width: 2.0,
+              if (result != null) {
+                PlatformFile file = result!.files.first;
+                filename = file.name;
+                await Future.delayed(const Duration(milliseconds: 500));
+                setState(() {});
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: ProjectColors.projectWhite,
+              side: BorderSide(
+                color: ProjectColors.projectRed,
+                width: 2.0,
+              ),
+            ),
+            child: Row(
+              children: [
+                Text('Görsel Ekle', style: ProjectTextStyle.redSmallStrong),
+                Icon(
+                  Icons.attach_file,
+                  size: 24,
+                  color: ProjectColors.projectRed,
+                )
+              ],
             ),
           ),
-          child: Text('Görsel Ekle', style: ProjectTextStyle.redSmallStrong),
         ),
         const SizedBox(width: 10),
         Text(
@@ -195,6 +267,9 @@ class _AddNewProductsPageState extends State<AddNewProductsPage> {
           title: _productNameController.text,
           description: _productDescriptionController.text,
           stockCount: int.parse(_productStockInfoController.text),
+          buyPrice: int.parse(_buyPriceController.text),
+          tagPrice: int.parse(_tagPriceController.text),
+          retailPrice: int.parse(_retailPriceController.text),
           mediaURL: productMediaURL,
           categoryID: widget.categoryID);
       vm.addNewProduct(
