@@ -1,6 +1,7 @@
 import 'package:envanter_kontrol/screens/add_new_category.dart';
 import 'package:envanter_kontrol/screens/add_new_product.dart';
 import 'package:envanter_kontrol/screens/home_categories.dart';
+import 'package:envanter_kontrol/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'utils/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: ProjectColors.customPrimarySwatch,
       ),
-      home: const HomePageCategories(),
+      home: const LoginPage(),
       routes: {
         "/addNewProduct": (context) => const AddNewProductsPage(
               categoryID: "demo ID",

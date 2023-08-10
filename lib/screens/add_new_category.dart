@@ -8,6 +8,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/navigation_animation.dart';
+
 class AddNewCategoryPage extends StatefulWidget {
   final String? categoryPath;
   const AddNewCategoryPage({super.key, String? this.categoryPath});
@@ -54,12 +56,8 @@ class _AddNewCategoryPageState extends State<AddNewCategoryPage> {
                     child: ElevatedButton(
                         onPressed: () async {
                           if (await _addNewCategory()) {
-                            Navigator.of(context).push(PageRouteBuilder(
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) {
-                                return const HomePageCategories();
-                              },
-                            ));
+                            Navigator.of(context).push(SlideUpPageRoute(
+                                page: const HomePageCategories()));
                           }
                         },
                         child: Text(

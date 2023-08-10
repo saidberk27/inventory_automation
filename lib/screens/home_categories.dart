@@ -6,6 +6,8 @@ import 'package:envanter_kontrol/utils/text_styles.dart';
 import 'package:envanter_kontrol/widgets/custom_fab.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/navigation_animation.dart';
+
 class HomePageCategories extends StatefulWidget {
   const HomePageCategories({super.key});
 
@@ -94,8 +96,8 @@ class _HomePageCategoriesState extends State<HomePageCategories> {
               onTap: () {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => CategoryPage(
+                    SlideUpPageRoute(
+                        page: CategoryPage(
                             categoryName: categoriesList[index]["title"],
                             categoryID: categoriesList[index]["id"])));
               },

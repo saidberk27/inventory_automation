@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:envanter_kontrol/viewmodel/product_vm.dart';
 
+import '../utils/navigation_animation.dart';
 import 'category_details.dart';
 
 class AddNewProductsPage extends StatefulWidget {
@@ -147,15 +148,15 @@ class _AddNewProductsPageState extends State<AddNewProductsPage>
                               if (widget.subcategoryID == null) {
                                 Navigator.push(
                                     context,
-                                    MaterialPageRoute(
-                                        builder: (context) => CategoryPage(
+                                    SlideUpPageRoute(
+                                        page: CategoryPage(
                                             categoryName: widget.categoryName,
                                             categoryID: widget.categoryID)));
                               } else {
                                 Navigator.pushAndRemoveUntil(
                                   context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SubCategoryPage(
+                                  SlideUpPageRoute(
+                                      page: SubCategoryPage(
                                           subCategoryID: widget.subcategoryID!,
                                           subCategoryName: widget.categoryName,
                                           categoryID:

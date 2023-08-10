@@ -6,6 +6,7 @@ import 'package:pie_chart/pie_chart.dart';
 
 import '../local_functions/product_stats.dart';
 import '../utils/colors.dart';
+import '../utils/navigation_animation.dart';
 import '../utils/text_styles.dart';
 import '../viewmodel/product_vm.dart';
 import '../widgets/footer.dart';
@@ -59,11 +60,6 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    _categoryListItems = ProductViewModel().getAllItemsOfCategory(
-        categoryID: widget.categoryID,
-        itemType: "products",
-        orderField: "timestamp",
-        subCategory: widget.subCategoryID);
     return Scaffold(
         bottomNavigationBar: const Padding(
           padding: EdgeInsets.only(bottom: 8.0),
@@ -173,8 +169,8 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
     return FloatingActionButton.extended(
       onPressed: () => Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (context) => AddNewProductsPage(
+          SlideUpPageRoute(
+              page: AddNewProductsPage(
                   categoryName: widget.subCategoryName,
                   categoryID: widget.categoryID,
                   subcategoryID: widget.subCategoryID))),
@@ -277,8 +273,8 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                           categoryDesc: _categoryDescUpdateController.text,
                           subCategoryID: widget.subCategoryID);
 
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const HomePageCategories()));
+                      Navigator.of(context).push(
+                          SlideUpPageRoute(page: const HomePageCategories()));
                     },
                     child: const Text("Alt Kategoriyi Güncelle")),
                 TextButton(
@@ -323,12 +319,8 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                     setState(() {});
                   }
 
-                  Navigator.of(context).pop();
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) {
-                      return const HomePageCategories();
-                    },
-                  ));
+                  Navigator.push(context,
+                      SlideUpPageRoute(page: const HomePageCategories()));
                 },
                 child: const Text("Evet")),
             TextButton(
@@ -496,12 +488,24 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                                     ProductViewModel();
                                 if (await productViewModel.deleteProduct(
                                     categoryID: widget.categoryID,
+                                    subcategoryID: widget.subCategoryID,
                                     docID: productID)) {
-                                  Navigator.of(context).pop();
-
                                   await Future.delayed(
-                                      const Duration(milliseconds: 500));
-                                  setState(() {});
+                                          const Duration(milliseconds: 750))
+                                      .then((value) {
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      SlideUpPageRoute(
+                                          page: SubCategoryPage(
+                                              categoryID: widget.categoryID,
+                                              subCategoryName:
+                                                  widget.subCategoryName,
+                                              subCategoryID: widget
+                                                  .subCategoryID)), // Yeni sayfa
+                                      (Route<dynamic> route) => route
+                                          .isFirst, // Tüm önceki sayfaları temizle
+                                    );
+                                  });
                                 }
                               },
                               child: const Text("Ürünü Sil")),
@@ -511,6 +515,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                                     ProductViewModel();
                                 if (await productViewModel.updateProductInfo(
                                   categoryID: widget.categoryID,
+                                  subcategoryID: widget.subCategoryID,
                                   docID: productID,
                                   productTitle: _productTitleController.text,
                                   productDescrption:
@@ -526,13 +531,22 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                                       : int.parse(_buyPriceController.text),
                                 )) {
                                   await Future.delayed(
-                                          const Duration(milliseconds: 500))
+                                          const Duration(milliseconds: 750))
                                       .then((value) {
-                                    setState(() {});
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      SlideUpPageRoute(
+                                          page: SubCategoryPage(
+                                              categoryID: widget.categoryID,
+                                              subCategoryName:
+                                                  widget.subCategoryName,
+                                              subCategoryID: widget
+                                                  .subCategoryID)), // Yeni sayfa
+                                      (Route<dynamic> route) => route
+                                          .isFirst, // Tüm önceki sayfaları temizle
+                                    );
                                   });
                                 }
-
-                                Navigator.of(context).pop();
                               },
                               child: const Text("Ürünü Güncelle")),
                           TextButton(
@@ -598,12 +612,21 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                           subcategoryID: widget.subCategoryID,
                           docID: productID,
                           newStock: stockController.text)) {
-                        await Future.delayed(const Duration(
-                            milliseconds: 500)); // state updates too early
-                        setState(() {});
+                        await Future.delayed(const Duration(milliseconds: 750))
+                            .then((value) {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            SlideUpPageRoute(
+                                page: SubCategoryPage(
+                                    categoryID: widget.categoryID,
+                                    subCategoryName: widget.subCategoryName,
+                                    subCategoryID:
+                                        widget.subCategoryID)), // Yeni sayfa
+                            (Route<dynamic> route) =>
+                                route.isFirst, // Tüm önceki sayfaları temizle
+                          );
+                        });
                       }
-
-                      Navigator.of(context).pop();
                     },
                     child: const Text("Stok Bilgisini Güncelle"))
               ],

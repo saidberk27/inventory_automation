@@ -2,6 +2,7 @@ import 'package:envanter_kontrol/utils/colors.dart';
 import 'package:envanter_kontrol/viewmodel/login_vm.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/navigation_animation.dart';
 import '../widgets/footer.dart';
 import 'home_categories.dart';
 
@@ -176,11 +177,8 @@ class _LoginPageState extends State<LoginPage> {
 
       String signInToken = await login.signInWithEmailAndPassword();
       if (signInToken == "succes") {
-        Navigator.of(context).push(PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) {
-            return const HomePageCategories();
-          },
-        ));
+        Navigator.of(context)
+            .push(SlideUpPageRoute(page: const HomePageCategories()));
       } else {
         Navigator.pop(context); // Closes previous loading dialog first.
         showDialog(

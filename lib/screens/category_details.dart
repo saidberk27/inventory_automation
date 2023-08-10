@@ -8,6 +8,7 @@ import 'package:pie_chart/pie_chart.dart';
 
 import '../local_functions/product_stats.dart';
 import '../utils/colors.dart';
+import '../utils/navigation_animation.dart';
 import '../utils/text_styles.dart';
 import '../viewmodel/product_vm.dart';
 import '../widgets/footer.dart';
@@ -62,15 +63,6 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    _categoryListItems = ProductViewModel().getAllItemsOfCategory(
-        categoryID: widget.categoryID,
-        itemType: "products",
-        orderField:
-            "timestamp"); // Arama sonuclarina gore hangi itemin dizilecegi degisiyor.
-    _subCategoryListItems = ProductViewModel().getAllItemsOfCategory(
-        categoryID: widget.categoryID,
-        itemType: "subcategories",
-        orderField: "title");
     return Scaffold(
         bottomNavigationBar: const Padding(
           padding: EdgeInsets.only(bottom: 8.0),
@@ -198,8 +190,8 @@ class _CategoryPageState extends State<CategoryPage> {
     return FloatingActionButton.extended(
       onPressed: () => Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (context) => AddNewProductsPage(
+          SlideUpPageRoute(
+              page: AddNewProductsPage(
                   categoryName: widget.categoryName,
                   categoryID: widget.categoryID))),
       focusColor: ProjectColors.projectBlue2,
@@ -220,8 +212,8 @@ class _CategoryPageState extends State<CategoryPage> {
     return FloatingActionButton.extended(
       onPressed: () => Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) => AddNewCategoryPage(
+          SlideUpPageRoute(
+            page: AddNewCategoryPage(
                 categoryPath: "categories/${widget.categoryID}"),
           )),
       focusColor: ProjectColors.projectOrange,
@@ -323,8 +315,8 @@ class _CategoryPageState extends State<CategoryPage> {
                           categoryID: widget.categoryID,
                           categoryTitle: _categoryNameUpdateController.text,
                           categoryDesc: _categoryDescUpdateController.text);
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const HomePageCategories()));
+                      Navigator.of(context).push(
+                          SlideUpPageRoute(page: const HomePageCategories()));
                     },
                     child: const Text("Kategoriyi Güncelle")),
                 TextButton(
@@ -368,11 +360,8 @@ class _CategoryPageState extends State<CategoryPage> {
                   }
 
                   Navigator.of(context).pop();
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) {
-                      return const HomePageCategories();
-                    },
-                  ));
+                  Navigator.push(context,
+                      SlideUpPageRoute(page: const HomePageCategories()));
                 },
                 child: const Text("Evet")),
             TextButton(
@@ -425,8 +414,8 @@ class _CategoryPageState extends State<CategoryPage> {
           onTap: () {
             Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => SubCategoryPage(
+                SlideUpPageRoute(
+                    page: SubCategoryPage(
                         subCategoryName: subCategoriesList[index]["title"],
                         categoryID: widget.categoryID,
                         subCategoryID: subCategoriesList[index]["id"])));
@@ -568,11 +557,16 @@ class _CategoryPageState extends State<CategoryPage> {
                                 if (await productViewModel.deleteProduct(
                                     categoryID: widget.categoryID,
                                     docID: productID)) {
-                                  Navigator.of(context).pop();
-
-                                  await Future.delayed(
-                                      const Duration(milliseconds: 500));
-                                  setState(() {});
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    SlideUpPageRoute(
+                                        page: CategoryPage(
+                                            categoryName: widget.categoryName,
+                                            categoryID: widget
+                                                .categoryID)), // Yeni sayfa
+                                    (Route<dynamic> route) => route
+                                        .isFirst, // Tüm önceki sayfaları temizle
+                                  );
                                 }
                               },
                               child: const Text("Ürünü Sil")),
@@ -597,13 +591,20 @@ class _CategoryPageState extends State<CategoryPage> {
                                       : int.parse(_buyPriceController.text),
                                 )) {
                                   await Future.delayed(
-                                          const Duration(milliseconds: 500))
+                                          const Duration(milliseconds: 750))
                                       .then((value) {
-                                    setState(() {});
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      SlideUpPageRoute(
+                                          page: CategoryPage(
+                                              categoryName: widget.categoryName,
+                                              categoryID: widget
+                                                  .categoryID)), // Yeni sayfa
+                                      (Route<dynamic> route) => route
+                                          .isFirst, // Tüm önceki sayfaları temizle
+                                    );
                                   });
                                 }
-
-                                Navigator.of(context).pop();
                               },
                               child: const Text("Ürünü Güncelle")),
                           TextButton(
