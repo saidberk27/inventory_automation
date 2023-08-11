@@ -155,7 +155,10 @@ class _CategoryPageState extends State<CategoryPage> {
                         flex: 4,
                         child: productsListView(productList: productList),
                       ),
-                      Expanded(flex: 3, child: pieChart(dataMap: dataMap)),
+                      Expanded(
+                        flex: 3,
+                        child: dataChartSection(),
+                      ),
                     ],
                   ),
                 ),
@@ -171,6 +174,19 @@ class _CategoryPageState extends State<CategoryPage> {
           Positioned(
               bottom: 72.0, right: 16.0, child: fabAddNewProduct(context))
         ]));
+  }
+
+  Widget dataChartSection() {
+    if (MediaQuery.of(context).size.width < 750) {
+      return Row(
+        children: [
+          Expanded(flex: 9, child: pieChart(dataMap: dataMap)),
+          Expanded(flex: 10, child: SizedBox())
+        ],
+      );
+    } else {
+      return pieChart(dataMap: dataMap);
+    }
   }
 
   FutureBuilder<List<Map<String, dynamic>>> subcategoriesFutureBuilder() {
