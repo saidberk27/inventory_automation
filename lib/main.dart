@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
       ),
       home: const LoginPage(),
       routes: {
+        "/home": (context) => const HomePageCategories(),
         "/addNewProduct": (context) => const AddNewProductsPage(
               categoryID: "demo ID",
               categoryName: 'demo Name',

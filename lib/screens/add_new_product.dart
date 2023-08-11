@@ -146,12 +146,16 @@ class _AddNewProductsPageState extends State<AddNewProductsPage>
                             //---- Business code
                             if (await _addNewProduct()) {
                               if (widget.subcategoryID == null) {
-                                Navigator.push(
-                                    context,
-                                    SlideUpPageRoute(
-                                        page: CategoryPage(
-                                            categoryName: widget.categoryName,
-                                            categoryID: widget.categoryID)));
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  SlideUpPageRoute(
+                                      page: CategoryPage(
+                                          categoryName: widget.categoryName,
+                                          categoryID:
+                                              widget.categoryID)), // Yeni sayfa
+                                  (Route<dynamic> route) => route
+                                      .isFirst, // Tüm önceki sayfaları temizle
+                                );
                               } else {
                                 Navigator.pushAndRemoveUntil(
                                   context,

@@ -177,8 +177,11 @@ class _LoginPageState extends State<LoginPage> {
 
       String signInToken = await login.signInWithEmailAndPassword();
       if (signInToken == "succes") {
-        Navigator.of(context)
-            .push(SlideUpPageRoute(page: const HomePageCategories()));
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => HomePageCategories()),
+          (route) => false,
+        );
       } else {
         Navigator.pop(context); // Closes previous loading dialog first.
         showDialog(
