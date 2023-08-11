@@ -138,7 +138,7 @@ class ProductViewModel {
           : newProductInfo.addAll({"buyPrice": buyPrice});
 
       ProjectFirestore db = ProjectFirestore();
-
+      print("burada $newProductInfo");
       db.updateDocument(path: path, docID: docID, newData: newProductInfo);
 
       return true;

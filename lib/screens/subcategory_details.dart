@@ -523,10 +523,10 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                                   tagPrice: _tagPriceController.text == ""
                                       ? null
                                       : int.parse(_tagPriceController.text),
-                                  retailPrice: _tagPriceController.text == ""
+                                  retailPrice: _retailPriceController.text == ""
                                       ? null
                                       : int.parse(_retailPriceController.text),
-                                  buyPrice: _tagPriceController.text == ""
+                                  buyPrice: _buyPriceController.text == ""
                                       ? null
                                       : int.parse(_buyPriceController.text),
                                 )) {

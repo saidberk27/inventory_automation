@@ -179,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
       if (signInToken == "succes") {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomePageCategories()),
+          SlideUpPageRoute(page: const HomePageCategories()),
           (route) => false,
         );
       } else {

@@ -315,8 +315,10 @@ class _CategoryPageState extends State<CategoryPage> {
                           categoryID: widget.categoryID,
                           categoryTitle: _categoryNameUpdateController.text,
                           categoryDesc: _categoryDescUpdateController.text);
-                      Navigator.of(context).push(
-                          SlideUpPageRoute(page: const HomePageCategories()));
+                      await Future.delayed(Duration(milliseconds: 700)).then(
+                        (value) => Navigator.of(context).push(
+                            SlideUpPageRoute(page: const HomePageCategories())),
+                      );
                     },
                     child: const Text("Kategoriyi Güncelle")),
                 TextButton(
@@ -583,10 +585,10 @@ class _CategoryPageState extends State<CategoryPage> {
                                   tagPrice: _tagPriceController.text == ""
                                       ? null
                                       : int.parse(_tagPriceController.text),
-                                  retailPrice: _tagPriceController.text == ""
+                                  retailPrice: _retailPriceController.text == ""
                                       ? null
                                       : int.parse(_retailPriceController.text),
-                                  buyPrice: _tagPriceController.text == ""
+                                  buyPrice: _buyPriceController.text == ""
                                       ? null
                                       : int.parse(_buyPriceController.text),
                                 )) {
