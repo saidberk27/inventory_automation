@@ -409,6 +409,7 @@ class _CategoryPageState extends State<CategoryPage> {
                 tagPrice: productList[index]["tagPrice"],
                 retailPrice: productList[index]["retailPrice"],
                 productID: productList[index]["id"],
+                barcodeNumber: productList[index]["barcodeNumber"],
                 mediaURL: productList[index]["mediaURL"]);
           },
         );
@@ -463,6 +464,7 @@ class _CategoryPageState extends State<CategoryPage> {
       required int buyPrice,
       required int tagPrice,
       required int retailPrice,
+      required String barcodeNumber,
       required String mediaURL}) {
     return showDialog(
         context: context,
@@ -480,6 +482,7 @@ class _CategoryPageState extends State<CategoryPage> {
                   Text('Alış Fiyatı ${buyPrice.toString()}'),
                   Text('Etiket Fiyatı: ${tagPrice.toString()}'),
                   Text('PSF: ${retailPrice.toString()}'),
+                  Text('Barkod Numarası: ${barcodeNumber}'),
                   Text(descrption),
                   InkWell(
                     onTap: () {

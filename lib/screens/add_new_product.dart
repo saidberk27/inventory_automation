@@ -42,6 +42,8 @@ class _AddNewProductsPageState extends State<AddNewProductsPage>
 
   final TextEditingController _retailPriceController = TextEditingController();
 
+  final TextEditingController _barcodeController = TextEditingController();
+
   String filename = "";
   FilePickerResult? result;
 
@@ -117,6 +119,10 @@ class _AddNewProductsPageState extends State<AddNewProductsPage>
                     titleAndInput(
                         title: "PSF Fiyatı",
                         textEditingController: _retailPriceController),
+                    const Divider(thickness: 2),
+                    titleAndInput(
+                        title: "Barkod Numarası",
+                        textEditingController: _barcodeController),
                     const Divider(thickness: 2),
                     titleAndInput(
                         title: "Ürün Stok Sayısı",
@@ -275,6 +281,7 @@ class _AddNewProductsPageState extends State<AddNewProductsPage>
           buyPrice: int.parse(_buyPriceController.text),
           tagPrice: int.parse(_tagPriceController.text),
           retailPrice: int.parse(_retailPriceController.text),
+          barcodeNumber: _barcodeController.text,
           mediaURL: productMediaURL,
           categoryID: widget.categoryID);
       vm.addNewProduct(
