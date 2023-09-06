@@ -436,7 +436,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                   Navigator.of(context).pop(); // Diyalog penceresini kapatır
                   uploadNewImage(context, productID: productID);
                 },
-                child: const Text('Görsel Ekle'),
+                child: const Text('Görseli Güncelle'),
               ),
               TextButton(
                 onPressed: () {
@@ -629,7 +629,8 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
             ),
             child: Row(
               children: [
-                Text('Görsel Ekle', style: ProjectTextStyle.redSmallStrong),
+                Text('Görseli Güncelle',
+                    style: ProjectTextStyle.redSmallStrong),
                 Icon(
                   Icons.attach_file,
                   size: 24,
@@ -716,19 +717,31 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Yeni Görsel Yükle"),
+          title: const Text("Görseli Güncelle"),
           content: filePickerSection(productID: productID),
           actions: [
             TextButton(
                 onPressed: () async {
                   String mediaURL =
                       await productVm.getMediaURL(result: result!);
-                  productVm.updateImage(
+                  await productVm.updateImage(
                       categoryID: widget.categoryID,
                       subcategoryID: widget.subCategoryID,
                       docID: productID,
                       mediaURL: mediaURL);
-                  setState(() {});
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content:
+                          Text("Resim Güncelleniyor Lütfen Bekleyiniz...")));
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    SlideUpPageRoute(
+                        page: SubCategoryPage(
+                            categoryID: widget.categoryID,
+                            subCategoryName: widget.subCategoryName,
+                            subCategoryID: widget.subCategoryID)), // Yeni sayfa
+                    (Route<dynamic> route) =>
+                        route.isFirst, // Tüm önceki sayfaları temizle
+                  );
                 },
                 child: const Text("Kaydet")),
             TextButton(
