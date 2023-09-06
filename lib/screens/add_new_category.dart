@@ -72,42 +72,6 @@ class _AddNewCategoryPageState extends State<AddNewCategoryPage> {
     );
   }
 
-  Row filePickerSection() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ElevatedButton(
-          onPressed: () async {
-            result = await FilePicker.platform.pickFiles(
-              type: FileType.custom,
-              allowedExtensions: ['jpg', 'png'],
-            );
-
-            if (result != null) {
-              PlatformFile file = result!.files.first;
-              filename = file.name;
-              await Future.delayed(const Duration(milliseconds: 500));
-              setState(() {});
-            }
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: ProjectColors.projectWhite,
-            side: BorderSide(
-              color: ProjectColors.projectRed,
-              width: 2.0,
-            ),
-          ),
-          child: Text('Dosya Seç', style: ProjectTextStyle.redSmallStrong),
-        ),
-        const SizedBox(width: 10),
-        Text(
-          filename,
-          style: ProjectTextStyle.brownSmallStrong,
-        )
-      ],
-    );
-  }
-
   Column titleAndInput(
       {required String title,
       required TextEditingController textEditingController}) {

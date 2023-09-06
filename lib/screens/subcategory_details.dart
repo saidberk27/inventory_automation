@@ -1,6 +1,7 @@
 import 'package:envanter_kontrol/screens/add_new_product.dart';
 import 'package:envanter_kontrol/screens/home_categories.dart';
 import 'package:envanter_kontrol/viewmodel/category_vm.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 
@@ -43,6 +44,9 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
   final TextEditingController _retailPriceController = TextEditingController();
   late String _categoryMainText;
   late TextButton _categoryMainButton;
+
+  FilePickerResult? result;
+  String filename = "";
   @override
   void initState() {
     super.initState();
@@ -430,6 +434,13 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(); // Diyalog penceresini kapatır
+                  uploadNewImage(context, productID: productID);
+                },
+                child: const Text('Görsel Ekle'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Diyalog penceresini kapatır
                   enterNewStockInfo(context, productID: productID);
                 },
                 child: const Text('Stok Düzenle'),
@@ -587,6 +598,56 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
     );
   }
 
+  Row filePickerSection({required String productID}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          height: MediaQuery.of(context).size.height / 12,
+          child: ElevatedButton(
+            onPressed: () async {
+              result = await FilePicker.platform.pickFiles(
+                type: FileType.custom,
+                allowedExtensions: ['jpg', 'png'],
+              );
+
+              if (result != null) {
+                PlatformFile file = result!.files.first;
+                filename = file.name;
+                await Future.delayed(const Duration(milliseconds: 500));
+                Navigator.pop(
+                    context); // It should be open and close to setState in dialog window.
+                uploadNewImage(context, productID: productID);
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: ProjectColors.projectWhite,
+              side: BorderSide(
+                color: ProjectColors.projectRed,
+                width: 2.0,
+              ),
+            ),
+            child: Row(
+              children: [
+                Text('Görsel Ekle', style: ProjectTextStyle.redSmallStrong),
+                Icon(
+                  Icons.attach_file,
+                  size: 24,
+                  color: ProjectColors.projectRed,
+                )
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Text(
+          filename,
+          style: ProjectTextStyle.brownSmallStrong,
+        ),
+      ],
+    );
+  }
+
   Future<dynamic> enterNewStockInfo(BuildContext context,
       {required String productID}) {
     TextEditingController stockController = TextEditingController();
@@ -640,6 +701,38 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
+                child: const Text("İptal Et"))
+          ],
+        );
+      },
+    );
+  }
+
+  Future<dynamic> uploadNewImage(BuildContext context,
+      {required String productID}) {
+    ProductViewModel productVm = ProductViewModel();
+    TextEditingController stockController = TextEditingController();
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Yeni Görsel Yükle"),
+          content: filePickerSection(productID: productID),
+          actions: [
+            TextButton(
+                onPressed: () async {
+                  String mediaURL =
+                      await productVm.getMediaURL(result: result!);
+                  productVm.updateImage(
+                      categoryID: widget.categoryID,
+                      subcategoryID: widget.subCategoryID,
+                      docID: productID,
+                      mediaURL: mediaURL);
+                  setState(() {});
+                },
+                child: const Text("Kaydet")),
+            TextButton(
+                onPressed: () => Navigator.pop(context),
                 child: const Text("İptal Et"))
           ],
         );

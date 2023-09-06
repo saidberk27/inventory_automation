@@ -113,7 +113,7 @@ class _AddNewProductsPageState extends State<AddNewProductsPage>
                         textEditingController: _buyPriceController),
                     const Divider(thickness: 2),
                     titleAndInput(
-                        title: "Etiket Fiyatı",
+                        title: "Liste Fiyatı",
                         textEditingController: _tagPriceController),
                     const Divider(thickness: 2),
                     titleAndInput(

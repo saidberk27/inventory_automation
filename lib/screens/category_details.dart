@@ -3,6 +3,7 @@ import 'package:envanter_kontrol/screens/add_new_product.dart';
 import 'package:envanter_kontrol/screens/home_categories.dart';
 import 'package:envanter_kontrol/screens/subcategory_details.dart';
 import 'package:envanter_kontrol/viewmodel/category_vm.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 
@@ -44,6 +45,9 @@ class _CategoryPageState extends State<CategoryPage> {
 
   late String _categoryMainText;
   late TextButton _categoryMainButton;
+
+  FilePickerResult? result;
+  String filename = "";
   @override
   void initState() {
     super.initState();
@@ -181,7 +185,7 @@ class _CategoryPageState extends State<CategoryPage> {
       return Row(
         children: [
           Expanded(flex: 9, child: pieChart(dataMap: dataMap)),
-          Expanded(flex: 10, child: SizedBox())
+          const Expanded(flex: 10, child: SizedBox())
         ],
       );
     } else {
@@ -331,7 +335,8 @@ class _CategoryPageState extends State<CategoryPage> {
                           categoryID: widget.categoryID,
                           categoryTitle: _categoryNameUpdateController.text,
                           categoryDesc: _categoryDescUpdateController.text);
-                      await Future.delayed(Duration(milliseconds: 700)).then(
+                      await Future.delayed(const Duration(milliseconds: 700))
+                          .then(
                         (value) => Navigator.of(context).push(
                             SlideUpPageRoute(page: const HomePageCategories())),
                       );

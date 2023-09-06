@@ -115,6 +115,27 @@ class ProductViewModel {
     }
   }
 
+  Future<bool> updateImage(
+      {required String categoryID,
+      required String docID,
+      required String mediaURL,
+      String? subcategoryID}) async {
+    try {
+      late String path;
+      subcategoryID == null
+          ? path = "categories/$categoryID/products"
+          : path =
+              "categories/$categoryID/subcategories/$subcategoryID/products";
+      ProjectFirestore db = ProjectFirestore();
+
+      db.updateDocument(
+          path: path, docID: docID, newData: {"mediaURL": mediaURL});
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<bool> deleteProduct(
       {required String categoryID,
       required String docID,
