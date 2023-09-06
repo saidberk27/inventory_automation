@@ -479,8 +479,9 @@ class _CategoryPageState extends State<CategoryPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Stok: ${stock.toString()}'),
-                  Text('Alış Fiyatı ${buyPrice.toString()}'),
-                  Text('Etiket Fiyatı: ${tagPrice.toString()}'),
+                  Text(
+                      'Alış Fiyatı ${buyPrice == -1 ? "Bilgi Yok" : buyPrice.toString()}'),
+                  Text('Liste Fiyatı: ${tagPrice.toString()}'),
                   Text('PSF: ${retailPrice.toString()}'),
                   Text('Barkod Numarası: ${barcodeNumber}'),
                   Text(descrption),
@@ -558,7 +559,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                 flex: 3,
                                 child: alertDialogTextFormField(
                                     controller: _tagPriceController,
-                                    hintText: "Yeni Etiket Fiyatı"),
+                                    hintText: "Yeni Liste Fiyatı"),
                               ),
                               const Expanded(flex: 1, child: SizedBox()),
                               Expanded(

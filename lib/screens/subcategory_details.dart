@@ -394,7 +394,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                 children: [
                   Text('Stok: ${stock.toString()}'),
                   Text('Alış Fiyatı ${buyPrice.toString()}'),
-                  Text('Etiket Fiyatı: ${tagPrice.toString()}'),
+                  Text('Liste Fiyatı: ${tagPrice.toString()}'),
                   Text('PSF: ${retailPrice.toString()}'),
                   Text('Barkod Numarası: ${barcodeNumber}'),
                   Text(descrption),
@@ -472,7 +472,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                                 flex: 3,
                                 child: alertDialogTextFormField(
                                     controller: _tagPriceController,
-                                    hintText: "Yeni Etiket Fiyatı"),
+                                    hintText: "Yeni Liste Fiyatı"),
                               ),
                               const Expanded(flex: 1, child: SizedBox()),
                               Expanded(

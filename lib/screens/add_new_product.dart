@@ -137,7 +137,8 @@ class _AddNewProductsPageState extends State<AddNewProductsPage>
                             showDialog(
                               builder: (context) {
                                 return AlertDialog(
-                                  title: const Text("Ürün Ekleniyor..."),
+                                  title: const Text(
+                                      "Ürün Ekleniyor... \nÜrün Ekleme İşlemi Fazla Mı Uzun Sürdü?\nBütün Alanları Doğru Şekilde Doldurduğunuza Emin Olun."),
                                   content: Row(
                                     children: const [
                                       Expanded(flex: 1, child: SizedBox()),
@@ -291,7 +292,7 @@ class _AddNewProductsPageState extends State<AddNewProductsPage>
       return true;
     } catch (e) {
       if (kDebugMode) {
-        print("e");
+        print(e.toString());
       }
       return false;
     }

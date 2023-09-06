@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 75),
             SizedBox(
                 width: MediaQuery.of(context).size.width / 2,
-                child: Image.asset("images/main_logo.png", height: 200)),
+                child: Image.asset("assets/images/main_logo.png", height: 200)),
             const SizedBox(height: 24),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),

@@ -22,8 +22,20 @@ class CategoryViewModel {
             collectionPath: "/categories/",
             orderField: "timestamp",
             isDescending: true);
-    debugPrint("Kategori Listesi $categoryList");
+
     return categoryList;
+  }
+
+  Future<List<Map<String, dynamic>>> getAllSubCategoriesOfCategory(
+      {required String categoryID}) async {
+    ProjectFirestore db = ProjectFirestore();
+    List<Map<String, dynamic>> subCategoryList =
+        await db.readAllDocumentsWithOrder(
+            collectionPath: "/categories/$categoryID/subcategories",
+            orderField: "timestamp",
+            isDescending: true);
+    debugPrint("SubKategori Listesi $subCategoryList");
+    return subCategoryList;
   }
 
   Future<bool> deleteCategory(

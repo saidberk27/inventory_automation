@@ -1,7 +1,9 @@
 import 'package:envanter_kontrol/model/product.dart';
 import 'package:envanter_kontrol/model/project_firestore.dart';
 import 'package:envanter_kontrol/model/project_storage.dart';
+import 'package:envanter_kontrol/viewmodel/category_vm.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 
 class ProductViewModel {
   Future<String> getMediaURL({required FilePickerResult result}) async {
@@ -44,13 +46,44 @@ class ProductViewModel {
       required String itemType,
       required String orderField,
       String? subCategory}) async {
-    List<Map<String, dynamic>> productList;
+    List<Map<String, dynamic>> productList = [];
+    List<Map<String, dynamic>> subCategoryProductsList = [];
+
+    List<Map<String, dynamic>> subcategoriesList;
+    List<String> subCategoriesIDList;
+
+    CategoryViewModel categoryViewModel = CategoryViewModel();
+    subcategoriesList = await categoryViewModel.getAllSubCategoriesOfCategory(
+        categoryID: categoryID);
     ProjectFirestore db = ProjectFirestore();
-    if (subCategory == null) {
-      productList = await db.readAllDocumentsWithOrder(
-          collectionPath: "/categories/$categoryID/$itemType",
+    subCategoriesIDList =
+        subcategoriesList.map((sub) => sub['id'] as String).toList();
+
+    for (String subID in subCategoriesIDList) {
+      List<Map<String, dynamic>> tempList = await db.readAllDocumentsWithOrder(
+          collectionPath:
+              "/categories/$categoryID/subcategories/$subID/products",
           orderField: orderField,
           isDescending: true);
+
+      subCategoryProductsList.addAll(tempList);
+    }
+
+    if (subCategory == null) {
+      if (itemType == "subcategories") {
+        productList = await db.readAllDocumentsWithOrder(
+            collectionPath: "/categories/$categoryID/$itemType",
+            orderField: orderField,
+            isDescending: true);
+      } else if (itemType == "products") {
+        List<Map<String, dynamic>> categoryProducts =
+            await db.readAllDocumentsWithOrder(
+                collectionPath: "/categories/$categoryID/$itemType",
+                orderField: orderField,
+                isDescending: true);
+        productList.addAll(subCategoryProductsList);
+        productList.addAll(categoryProducts);
+      }
     } else {
       productList = await db.readAllDocumentsWithOrder(
           collectionPath:
