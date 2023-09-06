@@ -3,7 +3,6 @@ import 'package:envanter_kontrol/model/project_firestore.dart';
 import 'package:envanter_kontrol/model/project_storage.dart';
 import 'package:envanter_kontrol/viewmodel/category_vm.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
 
 class ProductViewModel {
   Future<String> getMediaURL({required FilePickerResult result}) async {
@@ -184,19 +183,55 @@ class ProductViewModel {
       {required String categoryID,
       required String productName,
       String? subCategoryID}) async {
+    List<Map<String, dynamic>> productList = [];
+    List<String> subCategoriesIDList;
+    List<Map<String, dynamic>> subCategoryProductsList = [];
     ProjectFirestore db = ProjectFirestore();
+    CategoryViewModel categoryViewModel = CategoryViewModel();
     late String collectionPath;
-    subCategoryID == null
-        ? collectionPath = "/categories/$categoryID/products"
-        : collectionPath =
+
+    if (subCategoryID == null) {
+      List<Map<String, dynamic>> subcategoriesList = await categoryViewModel
+          .getAllSubCategoriesOfCategory(categoryID: categoryID);
+
+      subCategoriesIDList =
+          subcategoriesList.map((sub) => sub['id'] as String).toList();
+
+      for (subCategoryID in subCategoriesIDList) {
+        collectionPath =
             "/categories/$categoryID/subcategories/$subCategoryID/products";
-    List<Map<String, dynamic>> productList =
-        await db.readAllDocumentsWithSearch(
-            collectionPath: collectionPath,
-            isDescending: true,
-            searchField: "title",
-            searchValue: productName,
-            orderField: "timestamp");
+
+        List<Map<String, dynamic>> tempList =
+            await db.readAllDocumentsWithSearch(
+                collectionPath: collectionPath,
+                isDescending: true,
+                searchField: "title",
+                searchValue: productName,
+                orderField: "timestamp");
+
+        subCategoryProductsList.addAll(tempList);
+      }
+
+      List<Map<String, dynamic>> categoryProductsList =
+          await db.readAllDocumentsWithSearch(
+              collectionPath: collectionPath,
+              isDescending: true,
+              searchField: "title",
+              searchValue: productName,
+              orderField: "timestamp");
+
+      productList.addAll(categoryProductsList);
+      productList.addAll(subCategoryProductsList);
+    } else {
+      // Search Functionality in SubCategory Details page
+      productList = await db.readAllDocumentsWithSearch(
+          collectionPath:
+              "/categories/$categoryID/subcategories/$subCategoryID/products",
+          isDescending: true,
+          searchField: "title",
+          searchValue: productName,
+          orderField: "timestamp");
+    }
 
     return productList;
   }
