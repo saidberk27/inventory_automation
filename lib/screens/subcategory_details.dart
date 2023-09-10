@@ -64,6 +64,8 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    result = null;
+
     return Scaffold(
         bottomNavigationBar: const Padding(
           padding: EdgeInsets.only(bottom: 8.0),
@@ -733,6 +735,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content:
                           Text("Resim Güncelleniyor Lütfen Bekleyiniz...")));
+                  setState(() {});
                   Navigator.pushAndRemoveUntil(
                     context,
                     SlideUpPageRoute(
