@@ -379,9 +379,10 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
       required int stock,
       required String descrption,
       required String productID,
-      required int buyPrice,
-      required int tagPrice,
-      required int retailPrice,
+      required dynamic buyPrice,
+      required dynamic tagPrice,
+      required dynamic
+          retailPrice, // eski veriler int yeni veriler string olduğu için dynamic yaptım
       required String barcodeNumber,
       required String mediaURL}) {
     return showDialog(
@@ -536,13 +537,13 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                                       _productDescriptionController.text,
                                   tagPrice: _tagPriceController.text == ""
                                       ? null
-                                      : int.parse(_tagPriceController.text),
+                                      : _tagPriceController.text,
                                   retailPrice: _retailPriceController.text == ""
                                       ? null
-                                      : int.parse(_retailPriceController.text),
+                                      : _retailPriceController.text,
                                   buyPrice: _buyPriceController.text == ""
                                       ? null
-                                      : int.parse(_buyPriceController.text),
+                                      : _buyPriceController.text,
                                 )) {
                                   await Future.delayed(
                                           const Duration(milliseconds: 750))

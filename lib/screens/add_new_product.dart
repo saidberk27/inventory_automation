@@ -279,9 +279,9 @@ class _AddNewProductsPageState extends State<AddNewProductsPage>
           title: _productNameController.text,
           description: _productDescriptionController.text,
           stockCount: int.parse(_productStockInfoController.text),
-          buyPrice: int.parse(_buyPriceController.text),
-          tagPrice: int.parse(_tagPriceController.text),
-          retailPrice: int.parse(_retailPriceController.text),
+          buyPrice: _buyPriceController.text,
+          tagPrice: _tagPriceController.text,
+          retailPrice: _retailPriceController.text,
           barcodeNumber: _barcodeController.text,
           mediaURL: productMediaURL,
           categoryID: widget.categoryID);

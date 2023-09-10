@@ -2,9 +2,9 @@ class Product {
   String title;
   String description;
   int stockCount;
-  int buyPrice;
-  int tagPrice;
-  int retailPrice; // PSF
+  String buyPrice;
+  String tagPrice;
+  String retailPrice; // PSF
   String? barcodeNumber;
   String? mediaURL;
   String categoryID;
@@ -26,9 +26,9 @@ class Product {
         title: json['title'] as String,
         description: json['description'] as String,
         stockCount: json['stockCount'] as int,
-        buyPrice: json['buyPrice'] as int,
-        tagPrice: json['tagPrice'] as int,
-        retailPrice: json['retailPrice'] as int,
+        buyPrice: json['buyPrice'] as String,
+        tagPrice: json['tagPrice'] as String,
+        retailPrice: json['retailPrice'] as String,
         barcodeNumber: json['barcodeNumber'] as String,
         mediaURL: json['mediaURL'] as String,
         categoryID: json['categoryID'] as String);

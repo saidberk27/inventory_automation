@@ -160,9 +160,9 @@ class ProductViewModel {
       required String docID,
       required String productTitle,
       required String productDescrption,
-      required int? tagPrice,
-      required int? retailPrice,
-      required int? buyPrice}) async {
+      required String? tagPrice,
+      required String? retailPrice,
+      required String? buyPrice}) async {
     try {
       Map<String, dynamic> newProductInfo = {};
       late String path;
@@ -191,7 +191,7 @@ class ProductViewModel {
           : newProductInfo.addAll({"buyPrice": buyPrice});
 
       ProjectFirestore db = ProjectFirestore();
-      print("burada $newProductInfo");
+
       db.updateDocument(path: path, docID: docID, newData: newProductInfo);
 
       return true;
